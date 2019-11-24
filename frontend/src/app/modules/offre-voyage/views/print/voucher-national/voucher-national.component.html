@@ -1,0 +1,63 @@
+<button mat-button (click)="donwload()">
+  <mat-icon color="primary">save_alt</mat-icon>
+</button>
+<div id="c" #content>
+  <div class="voucher-container">
+    <div class="header">
+      <div class="title">
+        VOUCHER
+      </div>
+      <div class="sub-title">
+        <div>
+          Date : {{date|date: 'dd-MM-yyyy'}}
+        </div>
+        <div>
+          Voucher N° : {{'00' + offreVoyage.id}}
+        </div>
+      </div>
+    </div>
+    <div class="body">
+      <div class="item">
+        <div> AGENCE :</div>
+        <div *ngIf="offreVoyage.agence_id"> {{offreVoyage.agence.nom|uppercase}}</div>
+        <div *ngIf="!offreVoyage.agence_id"> {{'AJINSAFRO'|translate}}</div>
+      </div>
+      <div class="item">
+        <div> PAYS :</div>
+        <div> Maroc</div>
+      </div>
+      <div class="item">
+        <div> PERIODE :</div>
+        <div> Du {{offreVoyage.dateDepart|date:'dd'}} Au {{offreVoyage.dateDarrive|date:'dd MMMM yyyy'}} </div>
+      </div>
+      <div class="item">
+        <div> N° DE PERSONNES :</div>
+        <div> La liste en piéce joint</div>
+      </div>
+      <div class="item">
+        <div> {{'ACCOMPAGNATEUR:'|translate}}</div>
+        <div>
+          <span class="acc" *ngFor="let v of offreVoyage.accompagnateurs">{{v.prenom + ' ' + v.nom |uppercase}}</span>
+        </div>
+      </div>
+    </div>
+    <div class="sub-body">
+      <div> Autorisation du transport des voyages de <span class="villes"
+                                                           *ngFor="let v of offreVoyage.voyage.villes">{{v.nom|titlecase}}</span>
+        à <span class="villes"
+                *ngFor="let v of offreVoyage.voyage.villesVisiter">{{v.nom|titlecase}}</span>
+
+      </div>
+    </div>
+    <div class="footer">
+      <div class="date-depart">{{offreVoyage.dateDepart|date:'EEEE dd MMMM yyyy'}}</div>
+      <div>{{'- Départ de '|translate}} <span class="villes"
+                                              *ngFor="let v of offreVoyage.voyage.villes">{{v.nom|titlecase}}</span>
+      </div>
+      <div class="date-arrive">{{offreVoyage.dateDarrive|date:'EEEE dd MMMM yyyy'}}</div>
+      <div>{{'- Retour à '|translate}} <span class="villes"
+                                             *ngFor="let v of offreVoyage.voyage.villes">{{v.nom|titlecase}}</span>
+      </div>
+    </div>
+  </div>
+</div>

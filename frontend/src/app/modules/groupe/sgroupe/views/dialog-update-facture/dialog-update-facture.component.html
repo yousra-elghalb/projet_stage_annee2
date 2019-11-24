@@ -1,0 +1,126 @@
+<h2 mat-dialog-title>{{'Modifier Facture'|translate}}</h2>
+<div mat-dialog-content>
+  <form [formGroup]="elementForm" (ngSubmit)="save()">
+    <div fxLayout="column" fxLayoutAlign="end">
+      <mat-form-field>
+        <label>
+          <input matInput placeholder="{{'Reference'|translate}}" formControlName="ref">
+        </label>
+        <app-error-form [field]="'ref'" [form]="elementForm"></app-error-form>
+      </mat-form-field>
+      <mat-form-field>
+        <label>
+          <input matInput placeholder="{{'num facture'|translate}}" formControlName="num">
+        </label>
+        <app-error-form [field]="'num'" [form]="elementForm"></app-error-form>
+      </mat-form-field>
+      <mat-form-field>
+        <label>
+          <input matInput placeholder="{{'Nom Groupe'|translate}}" formControlName="nom_groupe">
+        </label>
+        <app-error-form [field]="'nom_groupe'" [form]="elementForm"></app-error-form>
+      </mat-form-field>
+      <mat-form-field>
+        <label>
+          <input matInput placeholder="{{'ice'|translate}}" formControlName="ice">
+        </label>
+        <app-error-form [field]="'ice'" [form]="elementForm"></app-error-form>
+      </mat-form-field>
+      <mat-form-field>
+        <label>
+          <input matInput placeholder="{{'nom et prenom du client'|translate}}" formControlName="nom_voyageur">
+        </label>
+        <app-error-form [field]="'nom_voyageur'" [form]="elementForm"></app-error-form>
+      </mat-form-field>
+      <mat-form-field>
+        <label>
+          <input matInput placeholder="{{'cin du client'|translate}}" formControlName="cin">
+        </label>
+        <app-error-form [field]="'cin'" [form]="elementForm"></app-error-form>
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>{{'client'|translate}}</mat-label>
+        <mat-select (selectionChange)="clientChange()" formControlName="voyageur">
+          <mat-option
+            *ngFor="let v of data.sGroupe.voyageurs" [value]="v">{{v.nom + ' ' + v.prenom}}</mat-option>
+        </mat-select>
+        <app-error-form [field]="'voyageur'" [form]="elementForm"></app-error-form>
+      </mat-form-field>
+      <mat-form-field>
+        <textarea matInput placeholder="{{'designation'|translate}}" formControlName="desi"></textarea>
+        <app-error-form [field]="'desi'" [form]="elementForm"></app-error-form>
+      </mat-form-field>
+      <div fxLayout="row" fxLayoutAlign="space-between">
+        <mat-form-field fxFlex="30">
+          <label>
+            <input matInput placeholder="{{'Prix Adulte'|translate}}" formControlName="pu">
+          </label>
+          <app-error-form [field]="'pu'" [form]="elementForm"></app-error-form>
+        </mat-form-field>
+        <mat-form-field fxFlex="30">
+          <label>
+            <input matInput placeholder="{{'Prix enfant'|translate}}" formControlName="pu_enfant">
+          </label>
+          <app-error-form [field]="'pu_enfant'" [form]="elementForm"></app-error-form>
+        </mat-form-field>
+        <mat-form-field fxFlex="30">
+          <label>
+            <input matInput placeholder="{{'Prix bebe'|translate}}" formControlName="pu_bebe">
+          </label>
+          <app-error-form [field]="'pu_bebe'" [form]="elementForm"></app-error-form>
+        </mat-form-field>
+      </div>
+      <div fxLayout="row" fxLayoutAlign="space-between">
+        <mat-form-field fxFlex="30">
+          <label>
+            <input matInput placeholder="{{'QTE Adulte'|translate}}" formControlName="qte">
+          </label>
+          <app-error-form [field]="'qte'" [form]="elementForm"></app-error-form>
+        </mat-form-field>
+        <mat-form-field fxFlex="30">
+          <label>
+            <input matInput placeholder="{{'QTE Enfant'|translate}}" formControlName="qte_enfant">
+          </label>
+          <app-error-form [field]="'qte_enfant'" [form]="elementForm"></app-error-form>
+        </mat-form-field>
+        <mat-form-field fxFlex="30">
+          <label>
+            <input matInput placeholder="{{'QTE bebe'|translate}}" formControlName="qte_bebe">
+          </label>
+          <app-error-form [field]="'qte_bebe'" [form]="elementForm"></app-error-form>
+        </mat-form-field>
+      </div>
+      <div fxLayout="row" fxLayoutAlign="space-between">
+        <mat-form-field fxFlex="30">
+          <label>
+            <input matInput placeholder="{{'Reduction'|translate}}" formControlName="reduction">
+          </label>
+          <app-error-form [field]="'reduction'" [form]="elementForm"></app-error-form>
+        </mat-form-field>
+        <mat-form-field fxFlex="30">
+          <label>
+            <input matInput placeholder="{{'Montant options'|translate}}" formControlName="totale_options">
+          </label>
+          <app-error-form [field]="'totale_options'" [form]="elementForm"></app-error-form>
+        </mat-form-field>
+        <mat-form-field fxFlex="30">
+          <label>
+            <input matInput placeholder="{{'Totale'|translate}}" formControlName="ttc">
+          </label>
+          <app-error-form [field]="'ttc'" [form]="elementForm"></app-error-form>
+        </mat-form-field>
+      </div>
+    </div>
+  </form>
+  <div class="spinner-wrapper solid" *ngIf="isLoadingSpinner">
+    <mat-spinner diameter="60"></mat-spinner>
+  </div>
+</div>
+<div fxLayout="row" fxLayoutAlign="end" mat-dialog-actions>
+  <button color="primary" style="margin-right: 10px" mat-raised-button
+          (click)="close()">{{'annuler'|translate}}</button>
+  <button color="primary" mat-raised-button [disabled]="!elementForm.valid"
+          (click)="save()">{{'Update'|translate}}</button>
+</div>
+
+

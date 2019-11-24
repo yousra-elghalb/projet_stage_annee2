@@ -1,0 +1,77 @@
+<h2 mat-dialog-title>{{'Groupe avec convention'|translate}}</h2>
+<div fxLayout="column" fxLayoutAlign="start" mat-dialog-content>
+  <form *ngIf="!isLoadingSpinner" [formGroup]="elementForm">
+    <div fxLayout="column" fxLayoutAlign="end">
+      <mat-form-field>
+        <mat-label>{{'type'|translate}}</mat-label>
+        <mat-select formControlName="type" required>
+          <mat-option value="famille">{{'famille'|translate}}</mat-option>
+          <mat-option value="societe">{{'societe'|translate}}</mat-option>
+        </mat-select>
+        <app-error-form [field]="'type'" [form]="elementForm"></app-error-form>
+      </mat-form-field>
+      <mat-form-field>
+        <label>
+          <input matInput placeholder="{{'Nom'|translate}}" formControlName="nom">
+        </label>
+        <app-error-form [field]="'nom'" [form]="elementForm"></app-error-form>
+      </mat-form-field>
+      <mat-form-field *ngIf="elementForm.value.type=='societe'">
+        <label>
+          <input matInput placeholder="{{'raisonSociale'|translate}}" formControlName="raisonSociale">
+        </label>
+        <app-error-form [field]="'raisonSociale'" [form]="elementForm"></app-error-form>
+      </mat-form-field>
+      <mat-form-field>
+        <label>
+          <input matInput placeholder="{{'tel'|translate}}" formControlName="tel">
+        </label>
+        <app-error-form [field]="'tel'" [form]="elementForm"></app-error-form>
+      </mat-form-field>
+      <mat-form-field *ngIf="elementForm.value.type=='societe'">
+        <label>
+          <input matInput placeholder="{{'responsable'|translate}}" formControlName="responsable">
+        </label>
+        <app-error-form [field]="'responsable'" [form]="elementForm"></app-error-form>
+      </mat-form-field>
+      <mat-form-field *ngIf="elementForm.value.type=='societe'">
+        <label>
+          <input matInput placeholder="{{'ice'|translate}}" formControlName="ice">
+        </label>
+        <app-error-form [field]="'ice'" [form]="elementForm"></app-error-form>
+      </mat-form-field>
+      <mat-form-field *ngIf="elementForm.value.type=='societe'">
+        <label>
+          <input matInput placeholder="{{'adresse'|translate}}" formControlName="adresse">
+        </label>
+        <app-error-form [field]="'adresse'" [form]="elementForm"></app-error-form>
+      </mat-form-field>
+      <mat-form-field *ngIf="elementForm.value.type=='societe'">
+        <label>
+          <input matInput placeholder="{{'taille'|translate}}" formControlName="taille">
+        </label>
+        <app-error-form [field]="'taille'" [form]="elementForm"></app-error-form>
+      </mat-form-field>
+      <mat-form-field>
+        <label>
+          <input matInput placeholder="{{'reduction'|translate}}" formControlName="reduction">
+        </label>
+        <span matSuffix>%</span>
+
+        <app-error-form [field]="'reduction'" [form]="elementForm"></app-error-form>
+      </mat-form-field>
+    </div>
+
+
+  </form>
+  <div class="spinner-wrapper solid" *ngIf="isLoadingSpinner">
+    <mat-spinner diameter="60"></mat-spinner>
+  </div>
+</div>
+<div fxLayout="row" fxLayoutAlign="end" mat-dialog-actions>
+  <button color="primary" style="margin-right: 10px" mat-raised-button (click)="reset()">{{'reset'|translate}}</button>
+  <button color="primary" mat-raised-button [disabled]="!elementForm.valid"
+          (click)="save()">{{'Save'|translate}}</button>
+</div>
+
+

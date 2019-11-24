@@ -1,0 +1,23 @@
+<mat-error
+  *ngIf="form.controls[field].invalid && (form.controls[field].dirty || form.controls[field].touched)">
+  <small *ngIf="form.controls[field].errors.required" class="form-text text-danger">
+    {{'ce champ est obligatoire'|translate}}
+  </small>
+
+  <small *ngIf="form.controls[field].errors.minlength" class="form-text text-danger">
+    Name must be at least 3 characters long.
+  </small>
+
+  <small *ngIf="form.controls[field].errors.email" class="form-text text-danger">
+    email
+  </small>
+
+</mat-error>
+<mat-error *ngIf="form.controls[field].invalid">
+  <small *ngIf="form.controls[field].errors.min" class="form-text text-danger">
+    {{'la valeur ne peux pas etre negative'|translate}}
+  </small>
+  <small *ngIf="form.controls[field].errors.pattern" class="form-text text-danger">
+    {{'Cette valeur n\'est pas valide'|translate}}
+  </small>
+</mat-error>

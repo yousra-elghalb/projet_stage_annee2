@@ -1,0 +1,111 @@
+<app-sub-header subHeaderTitre="{{'Voyages'|translate}}">
+  <div fxFlex menu>
+    <app-sub-header-search [totale]="paginatorInformations.total" (onsearch)="onSearch($event)"></app-sub-header-search>
+  </div>
+  <!--<button *ngIf="(userPermission|async).isAdmin||(userPermission|async).role.edit" toolbar mat-stroked-button
+          color="primary"
+          (click)="newElement()">{{'Ajouter'| translate}}</button>-->
+</app-sub-header>
+<div class="container">
+
+  <mat-card>
+    <div class="table-container-responsive">
+      <table mat-table [dataSource]="dataSource">
+
+        <!-- Position Column -->
+        <ng-container matColumnDef="code">
+          <th mat-header-cell *matHeaderCellDef> {{'code'|translate}}</th>
+          <td mat-cell *matCellDef="let element"> {{element.id}} </td>
+        </ng-container>
+
+        <!-- Name Column -->
+        <ng-container matColumnDef="nom" sticky>
+          <th mat-header-cell *matHeaderCellDef> {{'Nom'|translate}}</th>
+          <td mat-cell *matCellDef="let element"> {{element.nom}} </td>
+        </ng-container>
+        <ng-container matColumnDef="description">
+          <th mat-header-cell *matHeaderCellDef> {{'Description'|translate}}</th>
+          <td mat-cell *matCellDef="let element"> {{element.description}} </td>
+        </ng-container> <!-- Name Column -->
+        <ng-container matColumnDef="minPlace">
+          <th mat-header-cell *matHeaderCellDef> {{'minPlace'|translate}}</th>
+          <td mat-cell *matCellDef="let element"> {{element.minPlace}} </td>
+        </ng-container>
+        <ng-container matColumnDef="maxPlace">
+          <th mat-header-cell *matHeaderCellDef> {{'maxPlace'|translate}}</th>
+          <td mat-cell *matCellDef="let element"> {{element.maxPlace}} </td>
+        </ng-container>
+        <ng-container matColumnDef="prixAdulte">
+          <th mat-header-cell *matHeaderCellDef> {{'prixAdulte'|translate}}</th>
+          <td mat-cell *matCellDef="let element"> {{element.prixAdulte}} DH</td>
+        </ng-container>
+        <ng-container matColumnDef="prixEnfant">
+          <th mat-header-cell *matHeaderCellDef> {{'prixEnfant'|translate}}</th>
+          <td mat-cell *matCellDef="let element"> {{element.prixEnfant}} DH</td>
+        </ng-container>
+        <ng-container matColumnDef="prixBebe">
+          <th mat-header-cell *matHeaderCellDef> {{'prixBebe'|translate}}</th>
+          <td mat-cell *matCellDef="let element"> {{element.prixBebe}} DH</td>
+        </ng-container>
+        <ng-container matColumnDef="categorie">
+          <th mat-header-cell *matHeaderCellDef> {{'categorie'|translate}}</th>
+          <td mat-cell *matCellDef="let element"> {{element.categorie.nom}} </td>
+        </ng-container>
+        <ng-container matColumnDef="sous_categorie">
+          <th mat-header-cell *matHeaderCellDef> {{'sous categorie'|translate}}</th>
+          <td mat-cell *matCellDef="let element"> {{element.sousCategorie.nom}} </td>
+        </ng-container>
+        <ng-container matColumnDef="villesDepart">
+          <th mat-header-cell *matHeaderCellDef> {{'ville de depart'|translate}}</th>
+          <td class="villes" mat-cell *matCellDef="let element">
+            <samp *ngFor="let v of element.villes">{{v.nom}}</samp>
+          </td>
+        </ng-container>
+        <!-- actions Column -->
+
+        <ng-container matColumnDef="actions" stickyEnd>
+          <th class="actions" mat-header-cell *matHeaderCellDef> {{'Actions'|translate}}</th>
+          <td mat-cell *matCellDef="let element">
+            <button mat-icon-button [matMenuTriggerFor]="appMenu">
+              <mat-icon>more_vert</mat-icon>
+            </button>
+            <mat-menu #appMenu="matMenu">
+              <a *ngIf="(userPermission|async).isAdmin||(userPermission|async).voyage.edit"
+                 routerLink="/voyage/update/{{element.id}}"
+                 mat-menu-item
+                 aria-label="modifier">
+                <mat-icon color="primary">edit</mat-icon>
+                {{'modifier'|translate}}
+              </a>
+              <button *ngIf="(userPermission|async).isAdmin||(userPermission|async).voyage.delete"
+                      (click)="delete(element.id)"
+                      mat-menu-item
+                      aria-label="Supprimer">
+                <mat-icon color="primary">delete</mat-icon>
+                {{'supprimer'|translate}}
+              </button>
+              <button *ngIf="(userPermission|async).isAdmin||(userPermission|async).offreVoyage.edit"
+                      (click)="addOffreVoyage(element)"
+                      mat-menu-item
+                      aria-label="add">
+                <mat-icon color="primary">add</mat-icon>
+                {{'Dates de depart'|translate}}
+              </button>
+            </mat-menu>
+
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+    </div>
+    <mat-paginator #paginator
+                   [length]="paginatorInformations.total"
+                   [pageSize]="paginatorInformations.per_page"
+                   [pageIndex]="paginatorInformations.current_page-1"
+                   [pageSizeOptions]="[5, 15, 30, 60, 120]"
+                   (page)="change(paginator)"
+                   showFirstLastButtons></mat-paginator>
+  </mat-card>
+</div>

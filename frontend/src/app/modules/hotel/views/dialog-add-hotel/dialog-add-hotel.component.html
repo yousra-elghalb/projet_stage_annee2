@@ -1,0 +1,50 @@
+<h2 mat-dialog-title>{{'Nouveau Hotel'|translate}}</h2>
+<div mat-dialog-content>
+  <form [formGroup]="elementForm" (ngSubmit)="save()">
+
+    <div fxLayout="column" fxLayoutAlign="end">
+
+      <app-mat-star-rating [rating]="1" [starCount]="5" [color]="'primary'"
+                           (ratingUpdated)="onRatingChanged($event)"></app-mat-star-rating>
+      <mat-form-field>
+        <label>
+          <input matInput placeholder="{{'Nom'|translate}}" formControlName="nom">
+        </label>
+        <app-error-form [field]="'nom'" [form]="elementForm"></app-error-form>
+      </mat-form-field>
+      <mat-form-field>
+        <label>
+          <input matInput placeholder="{{'responsable'|translate}}" formControlName="responsable">
+        </label>
+        <app-error-form [field]="'responsable'" [form]="elementForm"></app-error-form>
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>{{'formule'|translate}}</mat-label>
+        <mat-select formControlName="formule" required>
+          <mat-option value="bb">{{'BB'|translate}}</mat-option>
+          <mat-option value="dp">{{'DP'|translate}}</mat-option>
+          <mat-option value="pc">{{'PC'|translate}}</mat-option>
+        </mat-select>
+        <app-error-form [field]="'formule'" [form]="elementForm"></app-error-form>
+      </mat-form-field>
+      <mat-form-field>
+        <label>
+          <input matInput placeholder="{{'RIB'|translate}}" formControlName="rib">
+        </label>
+        <app-error-form [field]="'rib'" [form]="elementForm"></app-error-form>
+      </mat-form-field>
+    </div>
+
+
+  </form>
+  <div class="spinner-wrapper solid" *ngIf="isLoadingSpinner">
+    <mat-spinner diameter="60"></mat-spinner>
+  </div>
+</div>
+<div fxLayout="row" fxLayoutAlign="end" mat-dialog-actions>
+  <button color="primary" style="margin-right: 10px" mat-raised-button (click)="reset()">{{'reset'|translate}}</button>
+  <button color="primary" mat-raised-button [disabled]="!elementForm.valid"
+          (click)="save()">{{'Save'|translate}}</button>
+</div>
+
+

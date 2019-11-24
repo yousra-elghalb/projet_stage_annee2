@@ -1,0 +1,66 @@
+<h2 mat-dialog-title>{{'Commercieux externe'|translate}}</h2>
+<div mat-dialog-content>
+  <form [formGroup]="elementForm" (ngSubmit)="save()">
+    <div fxLayout="column" fxLayoutAlign="end">
+      <div fxLayout="row">
+        <h3>{{'Voyage :'|translate}}</h3>
+        <h3>{{data.offreVoyage.voyage.nom + ' ' + data.offreVoyage.suffixe}}</h3>
+      </div>
+      <div fxLayout="row" fxLayoutAlign="space-between">
+        <h3></h3>
+        <div class="my-card-action">
+          <button (click)="addCommercial()" mat-icon-button aria-label="add">
+            <mat-icon>add</mat-icon>
+          </button>
+        </div>
+      </div>
+
+
+      <div formArrayName="commerciaux"
+           *ngFor="let commercial of elementForm.get('commerciaux')['controls']; let i = index">
+        <ng-container [formGroupName]="i">
+          <div fxLayout="row" fxLayoutAlign="space-between">
+            <mat-form-field fxFlex="30">
+              <mat-label>{{'Commercial'|translate}}</mat-label>
+              <mat-select formControlName="commercial_id">
+                <mat-option *ngFor="let cat of commerciaux|async" [value]="cat.id">
+                  {{cat.nom}}  {{cat.prenom}}
+                </mat-option>
+              </mat-select>
+              <app-error-form [field]="'commercial_id'" [form]="commercial"></app-error-form>
+            </mat-form-field>
+            <mat-form-field fxFlex="30">
+              <input formControlName="optionalDate" matInput [matDatepicker]="picker2"
+                     placeholder="{{'date optionnelle'|translate}}">
+              <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+              <mat-datepicker #picker2></mat-datepicker>
+              <app-error-form [field]="'optionalDate'" [form]="commercial"></app-error-form>
+            </mat-form-field>
+            <mat-form-field fxFlex="30">
+              <label>
+                <input matInput placeholder="{{'nombre de place'|translate}}" formControlName="nbPlace">
+              </label>
+              <app-error-form [field]="'nbPlace'" [form]="commercial"></app-error-form>
+            </mat-form-field>
+            <button (click)="removeCommercial(i)" mat-icon-button aria-label="remove">
+              <mat-icon>remove</mat-icon>
+            </button>
+          </div>
+        </ng-container>
+      </div>
+    </div>
+  </form>
+
+  <div class="spinner-wrapper solid"
+       *ngIf="isLoadingSpinner||(commercialIsLoading|async)">
+    <mat-spinner diameter="60"></mat-spinner>
+  </div>
+</div>
+<div fxLayout="row" fxLayoutAlign="end" mat-dialog-actions>
+  <button color="primary" style="margin-right: 10px" mat-raised-button
+          (click)="close()">{{'annuler'|translate}}</button>
+  <button color="primary" mat-raised-button [disabled]="!elementForm.valid"
+          (click)="save()">{{'Save'|translate}}</button>
+</div>
+
+

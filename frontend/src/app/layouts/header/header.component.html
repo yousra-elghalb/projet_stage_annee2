@@ -1,0 +1,58 @@
+<mat-toolbar fxLayout="row" fxLayoutAlign="space-between center" class="header header-fixed" color="primary">
+  <div fxFlex>
+    <button
+      *ngIf="!drawer.opened"
+      type="button"
+      aria-label="Toggle sidenav"
+      mat-icon-button
+      (click)="drawer.toggle()">
+      <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
+    </button>
+    <app-menu-horizontal></app-menu-horizontal>
+  </div>
+  <div [matMenuTriggerFor]="personnes" class="topbar-user">
+<span class="topbar-username">
+  {{(commercial).nom|uppercase}}
+</span>
+    <img [src]="((commercial).srcImg)?(commercial).srcImg:'assets/avatar.png'" alt="">
+  </div>
+  <mat-menu class="topbar-user-menu" #personnes="matMenu">
+    <div class="topbar-user-menu">
+      <div class="topbar-user-menu-card" mat-menu-item>
+        <div fxLayout="row" fxLayoutAlign="space-between">
+          <div fxFlex="70" fxLayout="row" fxLayoutAlign="space-between center">
+            <img style="max-height: 60px"
+                 [src]="((commercial).srcImg)?(commercial).srcImg:'assets/avatar.png'" alt="">
+            <div>
+              {{(commercial).nom|uppercase}} {{(commercial).prenom|titlecase}}
+            </div>
+          </div>
+          <div></div>
+        </div>
+      </div>
+      <mat-divider></mat-divider>
+      <div (click)="update()" mat-menu-item>
+        <div fxLayout="row" fxLayoutAlign="space-between center">
+          <mat-icon color="accent">account_circle</mat-icon>
+          <div fxFlex class="item-details">
+            <span class="item-title">{{"Mon Profile"|translate}}</span>
+            <span class="item-time">{{"Infromations personnelles"|translate}}</span>
+          </div>
+        </div>
+      </div>
+      <div (click)="changePassword()" mat-menu-item>
+        <div fxLayout="row" fxLayoutAlign="space-between center">
+          <mat-icon color="accent">security</mat-icon>
+          <div fxFlex class="item-details">
+            <span class="item-title">{{"Mot de passe"|translate}}</span>
+            <span class="item-time">{{"changer le mot de passe de votre compte"|translate}}</span>
+          </div>
+        </div>
+      </div>
+      <mat-divider></mat-divider>
+      <div class="topbar-user-menu-footer" mat-menu-item>
+        <button (click)="logout()" color="accent" mat-stroked-button>{{'Logout'|translate}}</button>
+      </div>
+    </div>
+  </mat-menu>
+</mat-toolbar>

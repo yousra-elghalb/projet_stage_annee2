@@ -1,0 +1,104 @@
+<button mat-button (click)="donwload()">
+  <mat-icon color="primary">save_alt</mat-icon>
+</button>
+<div id="c" #content>
+  <div style="padding: 100px 40px 0px 40px;width: 21cm;" fxLayout="column">
+    <div style="margin-bottom: 15px" fxLayout="row" fxLayoutAlign="space-between center">
+      <table fxFlex="77" class="root" width="100%">
+        <tr>
+          <td colspan="3"> <span class="villes"
+                                 *ngFor="let v of offreVoyage.voyage.villesVisiter">{{v.nom|titlecase}}</span>
+            | Du {{offreVoyage.dateDepart|date:'dd'}} Au {{offreVoyage.dateDarrive|date:'dd MMMM yyyy'}}</td>
+        </tr>
+        <tr>
+          <td class="black" colspan="2">{{'ACCOMPAGNATEUR'|translate}}</td>
+          <td><span class="acc"
+                    *ngFor="let v of offreVoyage.accompagnateurs">{{v.prenom + ' ' + v.nom |uppercase}}</span>
+          </td>
+        </tr>
+      </table>
+      <img style="padding:0px 15px" fxFlex="20" src="assets/logo.png">
+    </div>
+    <table class="root" width="100%">
+      <tr class="black">
+        <td>N°</td>
+        <td>{{'Nom & Prenom'|translate}}</td>
+        <td>{{'Téléphone'|translate}}</td>
+        <td>{{'CIN'|translate}}</td>
+        <td>{{'Ville'|translate}}</td>
+        <td>{{'Montant payé'|translate}}</td>
+        <td>{{'Montant reste'|translate}}</td>
+      </tr>
+      <tr *ngFor="let g of pGroupes">
+        <td>
+          <table>
+            <tr *ngFor="let p of g.voyageurs">
+              <td>
+                {{p.id}}
+              </td>
+            </tr>
+          </table>
+        </td>
+        <td>
+          <table>
+            <tr *ngFor="let p of g.voyageurs">
+              <td>
+                {{p.nom + ' ' + p.prenom}}
+              </td>
+            </tr>
+          </table>
+        </td>
+        <td>
+          <table>
+            <tr *ngFor="let p of g.voyageurs">
+              <td>
+                {{p.tel}}
+              </td>
+            </tr>
+          </table>
+        </td>
+        <td>
+          <table>
+            <tr *ngFor="let p of g.voyageurs">
+              <td>
+                {{p.cin}}
+              </td>
+            </tr>
+          </table>
+        </td>
+        <td>
+          <table>
+            <tr>
+              <td [attr.rowspan]="g.voyageurs.length">
+                {{g.ville.nom}}
+              </td>
+            </tr>
+          </table>
+        </td>
+        <td>
+          <table>
+            <tr>
+              <td [attr.rowspan]="g.voyageurs.length">
+                {{g.paiement.totale - g.paiement.reste}}
+              </td>
+            </tr>
+          </table>
+        </td>
+        <td>
+          <table>
+            <tr>
+              <td [attr.rowspan]="g.voyageurs.length">
+                {{g.paiement.reste}}
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+      <tr>
+        <td colspan="5">{{'Totale :'|translate}}</td>
+        <td class="black">{{getMontantPaye()}}</td>
+        <td class="black">{{getReste()}}</td>
+      </tr>
+    </table>
+  </div>
+</div>

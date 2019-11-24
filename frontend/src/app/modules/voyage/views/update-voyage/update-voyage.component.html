@@ -1,0 +1,168 @@
+<app-sub-header subHeaderTitre="{{'Modifier Voyage'|translate}}">
+
+</app-sub-header>
+<div class="container">
+
+  <mat-card class="spinner-parent-wrapper">
+    <mat-card-header>
+      <div fxFlex="row" fxLayoutAlign="space-between">
+        <mat-card-title>{{'Modifier Voyage'|translate}}</mat-card-title>
+        <div class="my-card-action" fxLayout="row" fxLayoutAlign="start">
+          <a *ngIf="!(isSmall$|async)" mat-raised-button routerLink="/voyage/list">
+            <mat-icon>keyboard_backspace</mat-icon>
+            {{'Liste'|translate}}
+          </a>
+          <button *ngIf="!(isSmall$|async)" mat-raised-button [disabled]="!elementForm.valid"
+                  (click)="save()">{{'Save'|translate}}</button>
+
+          <button *ngIf="isSmall$|async" mat-icon-button [matMenuTriggerFor]="appMenu">
+            <mat-icon>more_vert</mat-icon>
+          </button>
+          <mat-menu #appMenu="matMenu">
+            <a mat-menu-item routerLink="/voyage/list">
+              <mat-icon>keyboard_backspace</mat-icon>
+              {{'Liste'|translate}}
+            </a>
+            <button mat-menu-item [disabled]="!elementForm.valid" (click)="save()">{{'Save'|translate}}</button>
+          </mat-menu>
+
+        </div>
+      </div>
+    </mat-card-header>
+    <mat-divider></mat-divider>
+    <mat-card-content>
+      <form [formGroup]="elementForm">
+        <div fxLayout="row" fxLayout.lt-md="column" fxLayoutAlign="space-between">
+          <div fxFlex="55" fxFlex.lt-md="100" fxLayout="column" fxLayoutAlign="start">
+            <mat-form-field>
+              <label>
+                <input matInput placeholder="{{'Nom'|translate}}" formControlName="nom">
+              </label>
+              <app-error-form [field]="'nom'" [form]="elementForm"></app-error-form>
+            </mat-form-field>
+            <mat-form-field>
+              <textarea matInput placeholder="{{'description'|translate}}" formControlName="description"></textarea>
+              <app-error-form [field]="'description'" [form]="elementForm"></app-error-form>
+            </mat-form-field>
+            <mat-form-field>
+              <label>
+                <input matInput placeholder="{{'lien'|translate}}" formControlName="lien">
+              </label>
+              <app-error-form [field]="'lien'" [form]="elementForm"></app-error-form>
+            </mat-form-field>
+            <div fxLayout="row" fxLayoutAlign="space-between">
+              <mat-form-field fxFlex="30">
+                <label>
+                  <input matInput placeholder="{{'prixAdulte'|translate}}" formControlName="prixAdulte">
+                </label>
+                <span matSuffix>DH</span>
+                <app-error-form [field]="'prixAdulte'" [form]="elementForm"></app-error-form>
+              </mat-form-field>
+              <mat-form-field fxFlex="30">
+                <label>
+                  <input matInput placeholder="{{'prixEnfant'|translate}}" formControlName="prixEnfant">
+                </label>
+                <span matSuffix>DH</span>
+                <app-error-form [field]="'prixEnfant'" [form]="elementForm"></app-error-form>
+              </mat-form-field>
+              <mat-form-field fxFlex="30">
+                <label>
+                  <input matInput placeholder="{{'prixBebe'|translate}}" formControlName="prixBebe">
+                </label>
+                <span matSuffix>DH</span>
+                <app-error-form [field]="'prixBebe'" [form]="elementForm"></app-error-form>
+              </mat-form-field>
+            </div>
+            <div fxLayout="row" fxLayoutAlign="space-between">
+              <mat-form-field fxFlex="48">
+                <label>
+                  <input matInput placeholder="{{'minPlace'|translate}}" formControlName="minPlace">
+                </label>
+                <app-error-form [field]="'minPlace'" [form]="elementForm"></app-error-form>
+              </mat-form-field>
+              <mat-form-field fxFlex="48">
+                <label>
+                  <input matInput placeholder="{{'maxPlace'|translate}}" formControlName="maxPlace">
+                </label>
+                <app-error-form [field]="'maxPlace'" [form]="elementForm"></app-error-form>
+              </mat-form-field>
+            </div>
+            <div fxLayout="row" fxLayoutAlign="space-between start">
+              <app-chips-ville fxFlex
+                               [dataCtrl]="elementForm.get('villes')">
+              </app-chips-ville>
+              <button *ngIf="(userPermission|async).isAdmin||(userPermission|async).ville.edit" (click)="addVille()"
+                      mat-icon-button color="primary">
+                <mat-icon>add_circle</mat-icon>
+              </button>
+            </div>
+            <div fxLayout="row" fxLayoutAlign="space-between start">
+              <mat-form-field fxFlex>
+                <mat-label>{{'categorie'|translate}}</mat-label>
+                <mat-select (valueChange)="onChangeCat(categorie)" #categorie formControlName="categorie_id" required>
+                  <mat-option>--</mat-option>
+                  <mat-option *ngFor="let cat of categories|async" [value]="cat.id">
+                    {{cat.nom}}
+                  </mat-option>
+                </mat-select>
+                <app-error-form [field]="'categorie_id'" [form]="elementForm"></app-error-form>
+              </mat-form-field>
+              <button *ngIf="(userPermission|async).isAdmin||(userPermission|async).categorie.edit"
+                      (click)="addCategorie()" mat-icon-button color="primary">
+                <mat-icon>add_circle</mat-icon>
+              </button>
+            </div>
+
+            <mat-form-field>
+              <mat-label>{{'sous categorie'|translate}}</mat-label>
+              <mat-select formControlName="sous_categorie_id" required>
+                <mat-option>--</mat-option>
+                <mat-option *ngFor="let cat of sousCategories" [value]="cat.id">
+                  {{cat.nom}}
+                </mat-option>
+              </mat-select>
+              <app-error-form [field]="'sous_categorie_id'" [form]="elementForm"></app-error-form>
+            </mat-form-field>
+          </div>
+          <div fxFlex="38" fxFlex.lt-md="100" fxLayout="column">
+            <div class="mat-h3 mat-subheading-2">{{'Trajet'|translate}}</div>
+            <div fxLayout="row" fxLayoutAlign="space-between start">
+              <mat-form-field fxFlex>
+                <mat-label>{{'Villes'|translate}}</mat-label>
+                <mat-select (valueChange)="onChangeVille(ville)" #ville required>
+                  <mat-option *ngFor="let ville of villes$|async" [value]="ville">
+                    {{ville.nom}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+              <button *ngIf="(userPermission|async).isAdmin||(userPermission|async).ville.edit"
+                      (click)="addVille()" mat-icon-button
+                      color="primary">
+                <mat-icon>add_circle</mat-icon>
+              </button>
+            </div>
+            <div fxFlex="48" fxLayout="column" fxLayoutAlign="start">
+              <div *ngIf="villesVisiter.length>0" cdkDropList class="example-list"
+                   (cdkDropListDropped)="dropVille($event)">
+                <div fxLayout="row" fxLayoutAlign="space-between center" class="example-box"
+                     *ngFor="let ville of villesVisiter" cdkDrag>
+                  <div>{{ville.nom}}</div>
+                  <button (click)="removeVilleVisiter(ville)" mat-icon-button aria-label="remove">
+                    <mat-icon>clear</mat-icon>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </form>
+    </mat-card-content>
+    <div class="spinner-wrapper transparent" *ngIf="isLoadingSpinner">
+      <mat-spinner diameter="60"></mat-spinner>
+    </div>
+  </mat-card>
+
+</div>
+
+

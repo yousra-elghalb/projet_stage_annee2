@@ -1,0 +1,56 @@
+<app-sub-header subHeaderTitre="{{'List Role'|translate}}">
+  <div fxFlex menu>
+    <app-sub-header-search [totale]="paginatorInformations.total" (onsearch)="onSearch($event)"></app-sub-header-search>
+  </div>
+  <button *ngIf="(userPermission|async).isAdmin||(userPermission|async).role.edit" toolbar mat-stroked-button
+          color="primary"
+          (click)="newElement()">{{'Ajouter'| translate}}</button>
+</app-sub-header>
+<div class="container">
+
+  <mat-card>
+    <table mat-table [dataSource]="dataSource">
+
+      <!-- Position Column -->
+      <ng-container matColumnDef="id">
+        <th mat-header-cell *matHeaderCellDef> {{'id'|translate}}</th>
+        <td mat-cell *matCellDef="let element"> {{element.id}} </td>
+      </ng-container>
+
+      <!-- Name Column -->
+      <ng-container matColumnDef="nom">
+        <th mat-header-cell *matHeaderCellDef> {{'Nom'|translate}}</th>
+        <td mat-cell *matCellDef="let element"> {{element.nom}} </td>
+      </ng-container>
+      <!-- actions Column -->
+
+      <ng-container matColumnDef="actions">
+        <th class="actions" mat-header-cell *matHeaderCellDef> {{'Actions'|translate}}</th>
+        <td mat-cell *matCellDef="let element">
+          <button *ngIf="(userPermission|async).isAdmin||(userPermission|async).role.edit" (click)="update(element.id)"
+                  mat-icon-button color="primary"
+                  aria-label="modifier">
+            <mat-icon>edit</mat-icon>
+          </button>
+          <button *ngIf="(userPermission|async).isAdmin||(userPermission|async).role.delete"
+                  (click)="delete(element.id)"
+                  mat-icon-button color="primary"
+                  aria-label="Supprimer">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+
+    <mat-paginator #paginator
+                   [length]="paginatorInformations.total"
+                   [pageSize]="paginatorInformations.per_page"
+                   [pageIndex]="paginatorInformations.current_page-1"
+                   [pageSizeOptions]="[5, 15, 30, 60, 120]"
+                   (page)="change(paginator)"
+                   showFirstLastButtons></mat-paginator>
+  </mat-card>
+</div>

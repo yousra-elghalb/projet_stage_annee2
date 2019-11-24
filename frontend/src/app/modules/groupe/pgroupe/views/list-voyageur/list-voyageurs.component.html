@@ -1,0 +1,312 @@
+<app-sub-header subHeaderTitre="{{offreVoyage.voyage.nom +' '+offreVoyage.suffixe }}">
+  <div fxFlex menu>
+    <app-sub-header-search [totale]="paginatorInformations.total" [valueSearch]="search.search"
+                           (onsearch)="onSearch($event)"></app-sub-header-search>
+  </div>
+</app-sub-header>
+<div class="container">
+
+  <mat-card>
+    <mat-card-header>
+      <div fxFlex="row" fxLayoutAlign="space-between">
+        <mat-card-title>{{'Liste Voyageurs'|translate}}</mat-card-title>
+        <div class="my-card-action" fxLayout="row" fxLayoutAlign="start">
+          <a *ngIf="!(isSmall$|async)" mat-raised-button routerLink="/offreVoyage/list/{{catId}}">
+            <mat-icon>keyboard_backspace</mat-icon>
+            {{'back'|translate}}
+          </a>
+          <button *ngIf="!(isSmall$|async)"
+                  mat-raised-button
+                  aria-label="list" [matMenuTriggerFor]="printlist">
+            <mat-icon color="primary">print</mat-icon>
+            {{'liste'|translate}}
+          </button>
+          <mat-menu #printlist="matMenu">
+            <button mat-menu-item
+                    (click)="printListVoyageurPGroupe()">{{'Pdf'|translate}}</button>
+            <button mat-menu-item
+                    (click)="printListExcelVoyageurPGroupe()">{{'Excel'|translate}}</button>
+          </mat-menu>
+          <button *ngIf="!(isSmall$|async)"
+                  mat-raised-button
+                  (click)="printFactures()"
+                  aria-label="list">
+            <mat-icon color="primary">print</mat-icon>
+            {{'factures'|translate}}
+          </button>
+          <button *ngIf="isSmall$|async" mat-icon-button [matMenuTriggerFor]="appMenu">
+            <mat-icon>more_vert</mat-icon>
+          </button>
+          <mat-menu #appMenu="matMenu">
+            <a mat-menu-item routerLink="/offreVoyage/list/{{catId}}">
+              <mat-icon>keyboard_backspace</mat-icon>
+              {{'back'|translate}}
+            </a>
+            <button
+              mat-menu-item
+              (click)="printListVoyageurPGroupe()"
+              aria-label="list">
+              <mat-icon color="primary">print</mat-icon>
+              {{'liste'|translate}}
+            </button>
+            <button
+              mat-menu-item
+              (click)="printFactures()"
+              aria-label="list">
+              <mat-icon color="primary">print</mat-icon>
+              {{'factures'|translate}}
+            </button>
+          </mat-menu>
+        </div>
+      </div>
+    </mat-card-header>
+    <mat-divider></mat-divider>
+    <form fxLayout="row" [formGroup]="elementFormSerach" (ngSubmit)="onSearchValue()">
+      <div fxLayout="row" fxLayout.lt-md="column" fxFlex.lt-sm="100" fxFlex.lt-md="80" fxFlex.gt-md="70"
+           fxLayoutAlign="space-between">
+        <div fxLayout="row" fxFlex.lt-md="80" fxFlex.lt-sm="100" fxFlex="48" fxLayoutAlign="space-between">
+          <mat-form-field fxFlex="48" class="input-headline">
+            <mat-label>{{'Relation'|translate}}</mat-label>
+            <mat-select (selectionChange)="onSearchValue()" formControlName="type">
+              <mat-option>--</mat-option>
+              <mat-option value="amicale">{{'amicale'|translate}}</mat-option>
+              <mat-option value="familiale">{{'familiale'|translate}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field fxFlex="48" class="input-headline">
+            <mat-label>{{'Etat'|translate}}</mat-label>
+            <mat-select (selectionChange)="onSearchValue()" formControlName="etat">
+              <mat-option>--</mat-option>
+              <mat-option value="en attente">{{'en attente'|translate}}</mat-option>
+              <mat-option value="validé">{{'validé'|translate}}</mat-option>
+              <mat-option value="annulé">{{'annulé'|translate}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div fxLayout="row" fxFlex.lt-md="80" fxFlex.lt-sm="100" fxFlex="48" fxLayoutAlign="space-between">
+          <mat-form-field fxFlex="48" class="input-headline">
+            <mat-label>{{'Ville'|translate}}</mat-label>
+            <mat-select (selectionChange)="onSearchValue()" formControlName="ville">
+              <mat-option>--</mat-option>
+              <mat-option *ngFor="let c of (offreVoyage.voyage.villes)"
+                          [value]="c.id">{{c.nom|translate}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field fxFlex="48" class="input-headline">
+            <mat-label>{{'Modalité de paiement'|translate}}</mat-label>
+            <mat-select (selectionChange)="onSearchValue()" formControlName="modalites" multiple>
+              <mat-option>--</mat-option>
+              <mat-option *ngFor="let c of (modalites|async)"
+                          [value]="c.id">{{c.nom|translate}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </div>
+    </form>
+    <mat-card-content>
+      <div class="table-container-responsive">
+        <table mat-table [dataSource]="dataSource">
+
+          <!-- Checkbox Column -->
+          <ng-container matColumnDef="select">
+            <th mat-header-cell *matHeaderCellDef>
+              <mat-checkbox (change)="$event ? masterToggle() : null"
+                            [checked]="selection.hasValue() && isAllSelected()"
+                            [indeterminate]="selection.hasValue() && !isAllSelected()"
+                            [aria-label]="checkboxLabel()">
+              </mat-checkbox>
+            </th>
+            <td mat-cell *matCellDef="let row">
+              <mat-checkbox (click)="$event.stopPropagation()"
+                            (change)="$event ? selection.toggle(row) : null"
+                            [checked]="selection.isSelected(row)"
+                            [aria-label]="checkboxLabel(row)">
+              </mat-checkbox>
+            </td>
+          </ng-container>
+          <!-- Position Column -->
+          <ng-container matColumnDef="id">
+            <th mat-header-cell *matHeaderCellDef> {{'code'|translate}}</th>
+            <td mat-cell *matCellDef="let element">
+              <div role="list">
+                <div class="element-list" *ngFor="let v of element.voyageurs" role="listitem">
+                  {{v.id}}
+                  <div class="my-mat-divider"></div>
+                </div>
+              </div>
+            </td>
+          </ng-container>
+
+          <!-- Name Column -->
+          <ng-container matColumnDef="nom" sticky>
+            <th mat-header-cell *matHeaderCellDef> {{'Nom et Prenom'|translate}}</th>
+            <td mat-cell *matCellDef="let element">
+              <div role="list">
+                <div class="element-list" *ngFor="let v of element.voyageurs" role="listitem">
+                  {{v.nom}}  {{v.prenom}}
+                  <div class="my-mat-divider"></div>
+                </div>
+              </div>
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="DatePaiement">
+            <th mat-header-cell *matHeaderCellDef> {{'Date de paiement'|translate}}</th>
+            <td mat-cell *matCellDef="let element">
+              <div role="list">
+                <div class="element-list" *ngFor="let v of element.paiement.traites" role="listitem">
+                  {{v.date|date:'MM/dd/yyyy'}}
+                  <div class="my-mat-divider"></div>
+                </div>
+              </div>
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="ModePaiement">
+            <th mat-header-cell *matHeaderCellDef> {{'Mode de paiement'|translate}}</th>
+            <td mat-cell *matCellDef="let element">
+              <div role="list">
+                <div class="element-list" *ngFor="let v of element.paiement.traites" role="listitem">
+                  {{v.modalite.nom}}
+                  <div class="my-mat-divider"></div>
+                </div>
+              </div>
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="montantpaye">
+            <th mat-header-cell *matHeaderCellDef> {{'Montant payé'|translate}}</th>
+            <td mat-cell *matCellDef="let element">
+              <div role="list">
+                <div class="element-list" *ngFor="let v of element.paiement.traites" role="listitem">
+                  {{v.montant}} DH
+                  <div class="my-mat-divider"></div>
+                </div>
+              </div>
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="facture">
+            <th mat-header-cell *matHeaderCellDef> {{'Facturé'|translate}}</th>
+            <td mat-cell *matCellDef="let element">
+              <div role="list">
+                <div class="element-list" *ngFor="let v of element.paiement.traites" role="listitem">
+
+                  <mat-chip-list class="chip-list-facture" aria-label="Fish selection">
+                    <mat-chip *ngIf="v.facture&&v.facture.num" class="oui"
+                              selected>{{'oui'|translate}}</mat-chip>
+                    <mat-chip *ngIf="!v.facture||!v.facture.num" class="non"
+                              selected>{{'non'|translate}}</mat-chip>
+                  </mat-chip-list>
+                  <div class="my-mat-divider"></div>
+                </div>
+              </div>
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="restpaye">
+            <th mat-header-cell *matHeaderCellDef> {{'Reste à payé'|translate}}</th>
+            <td mat-cell *matCellDef="let element">
+              {{element.paiement.reste}} DH
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="totale">
+            <th mat-header-cell *matHeaderCellDef> {{'Totale'|translate}}</th>
+            <td mat-cell *matCellDef="let element">
+              {{element.paiement.totale}} DH
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="ville">
+            <th mat-header-cell *matHeaderCellDef> {{'ville'|translate}}</th>
+            <td mat-cell *matCellDef="let element">
+              {{element.ville.nom}}
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="etat">
+            <th mat-header-cell *matHeaderCellDef> {{'etat'|translate}}</th>
+            <td mat-cell *matCellDef="let element">
+              {{element.etat}}
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="relation">
+            <th mat-header-cell *matHeaderCellDef> {{'relation'|translate}}</th>
+            <td mat-cell *matCellDef="let element">
+              {{element.type}}
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="reduction">
+            <th mat-header-cell *matHeaderCellDef> {{'reduction'|translate}}</th>
+            <td mat-cell *matCellDef="let element">
+              {{element.reduction}} DH
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="commercial">
+            <th mat-header-cell *matHeaderCellDef> {{'Commercial'|translate}}</th>
+            <td mat-cell *matCellDef="let element">
+              {{element.commercial.nom}}  {{element.commercial.prenom}}
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="cin">
+            <th mat-header-cell *matHeaderCellDef> {{'cin'|translate}}</th>
+            <td mat-cell *matCellDef="let element">
+              <div role="list">
+                <div class="element-list" *ngFor="let v of element.voyageurs" role="listitem">
+                  {{v.cin}}
+                  <div class="my-mat-divider"></div>
+                </div>
+              </div>
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="tel">
+            <th mat-header-cell *matHeaderCellDef> {{'tel'|translate}}</th>
+            <td mat-cell *matCellDef="let element">
+              <div role="list">
+                <div class="element-list" *ngFor="let v of element.voyageurs" role="listitem">
+                  {{v.tel}}
+                </div>
+              </div>
+            </td>
+          </ng-container>
+          <!-- actions Column -->
+
+          <ng-container matColumnDef="actions" stickyEnd>
+            <th mat-header-cell *matHeaderCellDef> {{'Actions'|translate}}</th>
+            <td mat-cell *matCellDef="let element">
+              <button *ngIf="element.commercial.id==(commercial|async).id" mat-icon-button
+                      [matMenuTriggerFor]="appMenu">
+                <mat-icon>more_vert</mat-icon>
+              </button>
+              <mat-menu #appMenu="matMenu">
+                <a *ngIf="(userPermission|async).isAdmin||(userPermission|async).pgroupe.edit"
+                   routerLink="update/{{element.id}}"
+                   mat-menu-item
+                   aria-label="modifier">
+                  <mat-icon color="primary">edit</mat-icon>
+                  {{'modifier'|translate}}
+                </a>
+                <button *ngIf="(userPermission|async).isAdmin||(userPermission|async).pgroupe.delete"
+                        (click)="delete(element.id)"
+                        mat-menu-item
+                        aria-label="Supprimer">
+                  <mat-icon color="primary">delete</mat-icon>
+                  {{'supprimer'|translate}}
+                </button>
+                <button
+                  (click)="ListOperationsPaiement(element)"
+                  mat-menu-item>
+                  <mat-icon color="primary">list</mat-icon>
+                  {{'Liste des operations'|translate}}
+                </button>
+              </mat-menu>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+      </div>
+      <mat-paginator #paginator
+                     [length]="paginatorInformations.total"
+                     [pageSize]="paginatorInformations.per_page"
+                     [pageIndex]="paginatorInformations.current_page-1"
+                     [pageSizeOptions]="[5, 15, 30, 60, 120]"
+                     (page)="change(paginator)"
+                     showFirstLastButtons></mat-paginator>
+    </mat-card-content>
+  </mat-card>
+</div>

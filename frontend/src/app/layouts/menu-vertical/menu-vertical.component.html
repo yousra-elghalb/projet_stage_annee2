@@ -1,0 +1,152 @@
+<mat-accordion displayMode="flat">
+  <mat-expansion-panel
+    *ngIf="(userPermission|async).isAdmin||
+    ((userPermission|async).voyage.read)||((userPermission|async).offreVoyage.read)||(commercial|async).limitedAccess">
+    <mat-expansion-panel-header expandedHeight="44px" collapsedHeight="44px">
+      <mat-panel-title>
+        {{'Voyages'|translate}}
+      </mat-panel-title>
+    </mat-expansion-panel-header>
+    <mat-nav-list role="list">
+      <a *ngIf="(userPermission|async).isAdmin||(userPermission|async).voyage.read" mat-list-item
+         routerLink="/offreVoyage/calendar">{{'calendar'|translate}}</a>
+      <div *ngFor="let cat of (categoires|async)">
+        <a
+          *ngIf="(!(commercial|async).limitedAccess)&&((userPermission|async).isAdmin||(userPermission|async).offreVoyage.read)"
+          mat-list-item
+          routerLink="/offreVoyage/list/{{cat.id}}">{{cat.nom|translate}}</a>
+        <a *ngIf="(commercial|async).limitedAccess" mat-list-item
+           routerLink="/offreVoyage/listOffreVoyageByCommercialExterne/{{cat.id}}">{{cat.nom|translate}}</a>
+      </div>
+      <a *ngIf="(userPermission|async).isAdmin||(userPermission|async).voyage.read" mat-list-item
+         routerLink="/voyage/list">{{'liste des voyages'|translate}}</a>
+      <a *ngIf="(userPermission|async).isAdmin||(userPermission|async).voyage.edit" mat-list-item
+         routerLink="/voyage/addvoyage">{{'Ajouter un voyage'|translate}}</a>
+    </mat-nav-list>
+  </mat-expansion-panel>
+
+  <mat-expansion-panel
+    *ngIf="(userPermission|async).isAdmin    ||
+        ((userPermission|async).voyageur.read||
+        (userPermission|async).groupeConvention.read )">
+    <mat-expansion-panel-header expandedHeight="44px" collapsedHeight="44px">
+      <mat-panel-title>
+        {{'Clients'|translate}}
+      </mat-panel-title>
+    </mat-expansion-panel-header>
+    <mat-nav-list role="list">
+      <a routerLinkActive="active" *ngIf="(userPermission|async).isAdmin || (userPermission|async).voyageur.read"
+         mat-list-item
+         routerLink="/voyageur/list/0/0">{{'voyageurs'|translate}}</a>
+      <a routerLinkActive="active" *ngIf="(userPermission|async).isAdmin || (userPermission|async).voyageur.read"
+         mat-list-item
+         routerLink="/voyageur/list/1/0">{{'voyageurs fidèles'|translate}}</a>
+      <a routerLinkActive="active" *ngIf="(userPermission|async).isAdmin || (userPermission|async).voyageur.read"
+         mat-list-item
+         routerLink="/voyageur/list/61453/1">{{'Liste noire'|translate}}</a>
+      <a routerLinkActive="active"
+         *ngIf="(userPermission|async).isAdmin || (userPermission|async).groupeConvention.read" mat-list-item
+         routerLink="/groupeConvention">{{'Groupes avec convention'|translate}}</a>
+    </mat-nav-list>
+  </mat-expansion-panel>
+
+  <mat-expansion-panel
+    *ngIf="(userPermission|async).isAdmin    ||
+        ((userPermission|async).societe.read     ||
+        (userPermission|async).vehicule.read     ||
+        (userPermission|async).typeVehicule.read     ||
+        (userPermission|async).marqueVehicule.read    )">
+    <mat-expansion-panel-header expandedHeight="44px" collapsedHeight="44px">
+      <mat-panel-title>
+        {{'Transport'|translate}}
+      </mat-panel-title>
+    </mat-expansion-panel-header>
+    <mat-nav-list role="list">
+      <a routerLinkActive="active" *ngIf="(userPermission|async).isAdmin || (userPermission|async).societe.read"
+         mat-list-item
+         routerLink="/societe">{{'societe'|translate}}</a>
+      <a routerLinkActive="active" *ngIf="(userPermission|async).isAdmin || (userPermission|async).vehicule.read"
+         mat-list-item
+         routerLink="/vehicule">{{'vehicule'|translate}}</a>
+      <a routerLinkActive="active"
+         *ngIf="(userPermission|async).isAdmin || (userPermission|async).typeVehicule.read" mat-list-item
+         routerLink="/typeVehicule">{{'typeVehicule'|translate}}</a>
+      <a routerLinkActive="active"
+         *ngIf="(userPermission|async).isAdmin || (userPermission|async).marqueVehicule.read" mat-list-item
+         routerLink="/marqueVehicule">{{'marqueVehicule'|translate}}</a>
+    </mat-nav-list>
+  </mat-expansion-panel>
+
+  <mat-expansion-panel
+    *ngIf="(userPermission|async).isAdmin||(
+    (userPermission|async).commercial.read||
+        (userPermission|async).chauffeur.read ||
+        (userPermission|async).accompagnateur.read
+
+                     )">
+    <mat-expansion-panel-header expandedHeight="44px" collapsedHeight="44px">
+      <mat-panel-title>
+        {{'personnel'|translate}}
+      </mat-panel-title>
+    </mat-expansion-panel-header>
+    <mat-nav-list role="list">
+      <a routerLinkActive="active" *ngIf="(userPermission|async).isAdmin||(userPermission|async).commercial.read"
+         mat-list-item
+         routerLink="/commercial/list/no">{{'commerciaux'|translate}}</a>
+      <a routerLinkActive="active" *ngIf="(userPermission|async).isAdmin||(userPermission|async).commercial.read"
+         mat-list-item
+         routerLink="/commercial/list/yes">{{'points de vente'|translate}}</a>
+      <a routerLinkActive="active" *ngIf="(userPermission|async).isAdmin || (userPermission|async).accompagnateur.read"
+         mat-list-item
+         routerLink="/accompagnateur">{{'accompagnateurs'|translate}}</a>
+      <a routerLinkActive="active" *ngIf="(userPermission|async).isAdmin || (userPermission|async).chauffeur.read"
+         mat-list-item
+         routerLink="/chauffeur">{{'chauffeurs'|translate}}</a>
+    </mat-nav-list>
+  </mat-expansion-panel>
+
+  <mat-expansion-panel
+    *ngIf="(userPermission|async).isAdmin    ||
+        ((userPermission|async).ville.read       ||
+        (userPermission|async).categorie.read    ||
+        (userPermission|async).sousCategorie.read||
+        (userPermission|async).agence.read       ||
+        (userPermission|async).modalite.read     ||
+        (userPermission|async).depense.read     ||
+        (userPermission|async).pays.read)">
+    <mat-expansion-panel-header expandedHeight="44px" collapsedHeight="44px">
+      <mat-panel-title>
+        {{'paramètres'|translate}}
+      </mat-panel-title>
+    </mat-expansion-panel-header>
+    <mat-nav-list role="list">
+      <a routerLinkActive="active"
+         *ngIf="(userPermission|async).isAdmin || (userPermission|async).ville.read" mat-list-item
+         routerLink="/ville">{{'Ville'|translate}}</a>
+      <a routerLinkActive="active" *ngIf="(userPermission|async).isAdmin || (userPermission|async).pays.read"
+         mat-list-item
+         routerLink="/pays">{{'Pays'|translate}}</a>
+      <a routerLinkActive="active" *ngIf="(userPermission|async).isAdmin || (userPermission|async).categorie.read"
+         mat-list-item
+         routerLink="/categorie">{{'Categorie'|translate}}</a>
+      <a routerLinkActive="active" *ngIf="(userPermission|async).isAdmin || (userPermission|async).sousCategorie.read"
+         mat-list-item
+         routerLink="/sousCategorie">{{'Sous Categorie'|translate}}</a>
+      <a routerLinkActive="active" *ngIf="(userPermission|async).isAdmin || (userPermission|async).agence.read"
+         mat-list-item
+         routerLink="/agence">{{'Agence'|translate}}</a>
+      <a routerLinkActive="active" *ngIf="(userPermission|async).isAdmin || (userPermission|async).modalite.read"
+         mat-list-item
+         routerLink="/modalite">{{'Modelité de paiement'|translate}}</a>
+      <a routerLinkActive="active"
+         *ngIf="(userPermission|async).isAdmin || (userPermission|async).depense.read" mat-list-item
+         routerLink="/depense">{{'Depense'|translate}}</a>
+      <a routerLinkActive="active"
+         *ngIf="(userPermission|async).isAdmin || (userPermission|async).option.read" mat-list-item
+         routerLink="/option">{{'Options'|translate}}</a>
+    </mat-nav-list>
+  </mat-expansion-panel>
+  <a routerLinkActive="active" class="my-menu-item"
+     *ngIf="(userPermission|async).isAdmin||(userPermission|async).role.read"
+     routerLink="/role">{{'Permissions'|translate}}</a>
+</mat-accordion>

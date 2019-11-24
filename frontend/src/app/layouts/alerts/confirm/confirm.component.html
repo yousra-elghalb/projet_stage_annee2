@@ -1,0 +1,8 @@
+<h2 mat-dialog-title>{{data.titre|translate}}</h2>
+<div mat-dialog-content>
+  <p>{{data.body|translate}}</p>
+</div>
+<div fxLayout="row" fxLayoutAlign="end" mat-dialog-actions>
+  <button mat-button (click)="onClose()">{{'Annuler'|translate}}</button>
+  <button mat-button (click)="onOk()">{{'ok'|translate}}</button>
+</div>

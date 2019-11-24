@@ -1,0 +1,96 @@
+.voucher-container {
+  width: 21cm;
+  height: 29.7cm;
+  padding: 140px 50px 0px 50px;
+  display: flex;
+  flex-direction: column;
+
+  .villes:not(:last-child)::after {
+    content: ' - ';
+  }
+
+  .footer {
+    display: flex;
+    flex-direction: column;
+
+    > * {
+      margin-bottom: 5px;
+    }
+
+    .date-depart {
+      background-color: black;
+      color: white;
+      width: 250px;
+      text-align: center;
+    }
+
+    .date-arrive {
+      background-color: black;
+      color: white;
+      width: 250px;
+      text-align: center;
+    }
+  }
+
+  .sub-body {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    margin-bottom: 50px;
+
+    :first-child {
+      max-width: 80%;
+      flex: 1 1 100%;
+      text-align: center;
+    }
+  }
+
+  .body {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    align-items: center;
+    margin-bottom: 60px;
+
+    .item {
+      width: 70%;
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 10px;
+
+      .acc:not(:last-child)::after {
+        content: ', ';
+      }
+
+
+      :first-child {
+        flex: 1 1 100%;
+        max-width: 40%;
+        text-align: end;
+      }
+
+      :last-child {
+        flex: 1 1 100%;
+        max-width: 40%;
+      }
+    }
+  }
+
+  .header {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+
+    .title {
+      font-size: 60px;
+      margin-bottom: 30px;
+    }
+
+    .sub-title {
+      width: 90%;
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 30px;
+    }
+  }
+}

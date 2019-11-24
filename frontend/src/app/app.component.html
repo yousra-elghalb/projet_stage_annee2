@@ -1,0 +1,5 @@
+<router-outlet></router-outlet>
+
+<div fxLayoutAlign="center center" class="spinner-login" *ngIf="(isLoginLoadng$|async)">
+  <mat-spinner [diameter]="40"></mat-spinner>
+</div>

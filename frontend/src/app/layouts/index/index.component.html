@@ -1,0 +1,29 @@
+<mat-sidenav-container class="sidenav-container">
+  <mat-sidenav #drawer class="sidenav" fixedInViewport
+               [attr.role]="(isSmall$ | async) ? 'dialog' : 'navigation'"
+               [mode]="(isSmall$ | async) ? 'over' : 'side'"
+               [opened]="(isSmall$ | async) === false">
+    <mat-toolbar fxLayout="row" fxLayoutAlign="space-between center">
+      <img fxFlex="80" src="assets/logo.png">
+      <button
+        *ngIf="drawer.opened"
+        type="button"
+        mat-icon-button
+        (click)="drawer.toggle()">
+        <mat-icon>menu</mat-icon>
+      </button>
+    </mat-toolbar>
+    <app-menu-vertical></app-menu-vertical>
+  </mat-sidenav>
+  <mat-sidenav-content [className]="(!(isSmall$|async)&&drawer.opened)?'aside-enable':''">
+    <div class="wrapper">
+      <app-header [drawer]="drawer" [isSmall]="(isSmall$|async)"></app-header>
+      <!-- Add Content Here -->
+      <div class="content">
+        <router-outlet></router-outlet>
+      </div>
+    </div>
+  </mat-sidenav-content>
+</mat-sidenav-container>
+<mat-progress-bar *ngIf="loadingRouteConfig||(selectIsLoading$|async)" class="root-mat-progress-bar"
+                  mode="indeterminate"></mat-progress-bar>

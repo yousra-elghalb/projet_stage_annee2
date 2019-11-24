@@ -1,0 +1,316 @@
+<app-sub-header subHeaderTitre="{{'Nouveau Voyage'|translate}}">
+
+</app-sub-header>
+<div class="container">
+  <mat-card class="spinner-parent-wrapper">
+    <mat-card-header>
+      <div fxFlex="row" fxLayoutAlign="space-between">
+        <mat-card-title>{{'Nouveau Voyage'|translate}}</mat-card-title>
+        <div class="my-card-action" fxLayout="row" fxLayoutAlign="start">
+          <a *ngIf="!(isSmall$|async)" mat-raised-button routerLink="/voyage/list">
+            <mat-icon>keyboard_backspace</mat-icon>
+            {{'Liste'|translate}}
+          </a>
+          <button *ngIf="!(isSmall$|async)" mat-raised-button (click)="reset()">{{'reset'|translate}}</button>
+          <button *ngIf="!(isSmall$|async)" mat-raised-button [disabled]="!elementForm.valid"
+                  (click)="save()">{{'Save'|translate}}</button>
+          <button *ngIf="isSmall$|async" mat-icon-button [matMenuTriggerFor]="appMenu">
+            <mat-icon>more_vert</mat-icon>
+          </button>
+          <mat-menu #appMenu="matMenu">
+            <a mat-menu-item routerLink="/voyage/list">
+              <mat-icon>keyboard_backspace</mat-icon>
+              {{'Liste'|translate}}
+            </a>
+            <button mat-menu-item (click)="reset()">{{'reset'|translate}}</button>
+            <button mat-menu-item [disabled]="!elementForm.valid" (click)="save()">{{'Save'|translate}}</button>
+
+          </mat-menu>
+        </div>
+      </div>
+    </mat-card-header>
+    <mat-divider></mat-divider>
+    <mat-card-content>
+      <form [formGroup]="elementForm">
+        <mat-horizontal-stepper #stepper>
+          <mat-step [stepControl]="elementForm">
+            <ng-template matStepLabel>{{'Voyage'|translate}}</ng-template>
+            <div fxFlex="100" fxLayout="row" fxLayout.lt-md="column" fxLayoutAlign="space-between">
+              <div fxFlex="55" fxFlex.lt-md="100" fxLayout="column" fxLayoutAlign="start">
+                <mat-form-field>
+                  <label>
+                    <input matInput placeholder="{{'Nom'|translate}}" formControlName="nom">
+                  </label>
+                  <app-error-form [field]="'nom'" [form]="elementForm"></app-error-form>
+                </mat-form-field>
+                <mat-form-field>
+                  <textarea matInput placeholder="{{'description'|translate}}" formControlName="description"></textarea>
+                  <app-error-form [field]="'description'" [form]="elementForm"></app-error-form>
+                </mat-form-field>
+                <mat-form-field>
+                  <label>
+                    <input matInput placeholder="{{'lien'|translate}}" formControlName="lien">
+                  </label>
+                  <app-error-form [field]="'lien'" [form]="elementForm"></app-error-form>
+                </mat-form-field>
+                <div fxLayout="row" fxLayoutAlign="space-between">
+                  <mat-form-field fxFlex="30">
+                    <label>
+                      <input matInput placeholder="{{'prixAdulte'|translate}}" formControlName="prixAdulte">
+                    </label>
+                    <span matSuffix>DH</span>
+                    <app-error-form [field]="'prixAdulte'" [form]="elementForm"></app-error-form>
+                  </mat-form-field>
+                  <mat-form-field fxFlex="30">
+                    <label>
+                      <input matInput placeholder="{{'prixEnfant'|translate}}" formControlName="prixEnfant">
+                    </label>
+                    <span matSuffix>DH</span>
+                    <app-error-form [field]="'prixEnfant'" [form]="elementForm"></app-error-form>
+                  </mat-form-field>
+                  <mat-form-field fxFlex="30">
+                    <label>
+                      <input matInput placeholder="{{'prixBebe'|translate}}" formControlName="prixBebe">
+                    </label>
+                    <span matSuffix>DH</span>
+                    <app-error-form [field]="'prixBebe'" [form]="elementForm"></app-error-form>
+                  </mat-form-field>
+                </div>
+                <div fxLayout="row" fxLayoutAlign="space-between">
+                  <mat-form-field fxFlex="48">
+                    <label>
+                      <input matInput placeholder="{{'minPlace'|translate}}" formControlName="minPlace">
+                    </label>
+                    <app-error-form [field]="'minPlace'" [form]="elementForm"></app-error-form>
+                  </mat-form-field>
+                  <mat-form-field fxFlex="48">
+                    <label>
+                      <input matInput placeholder="{{'maxPlace'|translate}}" formControlName="maxPlace">
+                    </label>
+                    <app-error-form [field]="'maxPlace'" [form]="elementForm"></app-error-form>
+                  </mat-form-field>
+                </div>
+                <div fxLayout="row" fxLayoutAlign="space-between start">
+                  <app-chips-ville fxFlex
+                                   [dataCtrl]="elementForm.get('villes')">
+                  </app-chips-ville>
+                  <button *ngIf="(userPermission|async).isAdmin||(userPermission|async).ville.edit" (click)="addVille()"
+                          mat-icon-button color="primary">
+                    <mat-icon>add_circle</mat-icon>
+                  </button>
+                </div>
+                <div fxLayout="row" fxLayoutAlign="space-between start">
+                  <mat-form-field fxFlex>
+                    <mat-label>{{'categorie'|translate}}</mat-label>
+                    <mat-select (valueChange)="onChangeCat(categorie)" #categorie formControlName="categorie_id"
+                                required>
+                      <mat-option>--</mat-option>
+                      <mat-option *ngFor="let cat of categories|async" [id]="cat.id" [value]="cat">
+                        {{cat.nom}}
+                      </mat-option>
+                    </mat-select>
+                    <app-error-form [field]="'categorie_id'" [form]="elementForm"></app-error-form>
+                  </mat-form-field>
+                  <button *ngIf="(userPermission|async).isAdmin||(userPermission|async).categorie.edit"
+                          (click)="addCategorie()" mat-icon-button
+                          color="primary">
+                    <mat-icon>add_circle</mat-icon>
+                  </button>
+                </div>
+
+                <mat-form-field>
+                  <mat-label>{{'sous categorie'|translate}}</mat-label>
+                  <mat-select formControlName="sous_categorie_id" required>
+                    <mat-option>--</mat-option>
+                    <mat-option *ngFor="let cat of sousCategories" [value]="cat.id">
+                      {{cat.nom}}
+                    </mat-option>
+                  </mat-select>
+                  <app-error-form [field]="'sous_categorie_id'" [form]="elementForm"></app-error-form>
+                </mat-form-field>
+              </div>
+              <div fxFlex="38" fxFlex.lt-md="100" fxLayout="column">
+                <div class="mat-h3 mat-subheading-2">{{'Trajet'|translate}}</div>
+                <div fxLayout="row" fxLayoutAlign="space-between start">
+                  <mat-form-field fxFlex>
+                    <mat-label>{{'Villes'|translate}}</mat-label>
+                    <mat-select (valueChange)="onChangeVille(ville)" #ville required>
+                      <mat-option *ngFor="let ville of villes$|async" [value]="ville">
+                        {{ville.nom}}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                  <button *ngIf="(userPermission|async).isAdmin||(userPermission|async).ville.edit"
+                          (click)="addVille()" mat-icon-button
+                          color="primary">
+                    <mat-icon>add_circle</mat-icon>
+                  </button>
+                </div>
+                <div *ngIf="villesVisiter.length>0" cdkDropList class="example-list"
+                     (cdkDropListDropped)="dropVille($event)">
+                  <div fxLayout="row" fxLayoutAlign="space-between center" class="example-box"
+                       *ngFor="let ville of villesVisiter" cdkDrag>
+                    <div>{{ville.nom}}</div>
+                    <button (click)="removeVilleVisiter(ville)" mat-icon-button aria-label="remove">
+                      <mat-icon>clear</mat-icon>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div>
+              <button mat-button matStepperNext>Next</button>
+            </div>
+          </mat-step>
+          <mat-step [stepControl]="elementForm">
+            <ng-template matStepLabel>{{'dates de departes'|translate}}</ng-template>
+            <div fxFlex="100" fxLayout="column" fxLayoutAlign="start">
+              <div fxLayout="row" fxLayoutAlign="space-between">
+                <h3></h3>
+                <div class="my-card-action">
+                  <button (click)="removeOffreVoyage()" mat-icon-button aria-label="remove">
+                    <mat-icon>remove</mat-icon>
+                  </button>
+                  <button (click)="addOffreVoyage()" mat-icon-button aria-label="add">
+                    <mat-icon>add</mat-icon>
+                  </button>
+                </div>
+              </div>
+              <div fxLayout="column">
+                <div style="position: relative" formArrayName="offreVoyages"
+                     *ngFor="let offreVoyage of elementForm.get('offreVoyages')['controls']; let i = index">
+                  <ng-container [formGroupName]="i">
+                    <div fxLayout="column">
+                      <mat-checkbox class="example-margin" formControlName="groupe">
+                        {{'Voyage pour une société ou une famille'|translate}}
+                      </mat-checkbox>
+                      <div fxLayout="row" fxLayout.lt-md="column" fxLayoutAlign="space-between">
+                        <div fxFlex="48" fxFlex.lt-md="100" fxLayout="row" fxLayoutAlign="space-between">
+                          <mat-form-field fxFlex="49">
+                            <input formControlName="suffixe" matInput
+                                   placeholder="{{'suffixe'|translate}}">
+                            <app-error-form [field]="'suffixe'" [form]="offreVoyage"></app-error-form>
+                          </mat-form-field>
+                          <mat-form-field fxFlex="49">
+                            <input formControlName="dateDepart" matInput [matDatepicker]="picker"
+                                   placeholder="{{'dateDepart'|translate}}">
+                            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                            <mat-datepicker #picker></mat-datepicker>
+                            <app-error-form [field]="'dateDepart'" [form]="offreVoyage"></app-error-form>
+                          </mat-form-field>
+
+                        </div>
+                        <div fxFlex="48" fxFlex.lt-md="100" fxLayout="row" fxLayoutAlign="space-between">
+                          <mat-form-field fxFlex="49">
+                            <input formControlName="dateDarrive" matInput [matDatepicker]="picker2"
+                                   placeholder="{{'dateDarrive'|translate}}">
+                            <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+                            <mat-datepicker #picker2></mat-datepicker>
+                            <app-error-form [field]="'dateDarrive'" [form]="offreVoyage"></app-error-form>
+                          </mat-form-field>
+                          <mat-form-field fxFlex="49">
+                            <mat-label>{{'Statut'|translate}}</mat-label>
+                            <mat-select formControlName="statut" required>
+                              <mat-option value="active">{{'active'|translate}}</mat-option>
+                              <mat-option value="annulé">{{'annulé'|translate}}</mat-option>
+                              <mat-option value="complète">{{'complète'|translate}}</mat-option>
+                            </mat-select>
+                            <app-error-form [field]="'statut'" [form]="offreVoyage"></app-error-form>
+                          </mat-form-field>
+                        </div>
+                      </div>
+                      <div fxLayout="row" fxLayout.lt-md="column" fxLayoutAlign="space-between">
+                        <div fxFlex="48" fxFlex.lt-md="100" fxLayout="row" fxLayoutAlign="space-between">
+                          <div fxFlex="49" fxLayout="row" fxLayoutAlign="space-between start">
+                            <mat-form-field fxFlex="80">
+                              <mat-label>{{'Agence'|translate}}</mat-label>
+                              <mat-select formControlName="agence_id">
+                                <mat-option>--</mat-option>
+                                <mat-option *ngFor="let cat of agences|async" [value]="cat.id">
+                                  {{cat.nom}}
+                                </mat-option>
+                              </mat-select>
+                              <app-error-form [field]="'agence_id'" [form]="offreVoyage"></app-error-form>
+                            </mat-form-field>
+                            <button *ngIf="(userPermission|async).isAdmin||(userPermission|async).agence.edit"
+                                    (click)="addAgence()" mat-icon-button color="primary">
+                              <mat-icon>add_circle</mat-icon>
+                            </button>
+                          </div>
+                          <div fxFlex="49" fxLayout="row" fxLayoutAlign="space-between start">
+                            <mat-form-field fxFlex="80">
+                              <mat-label>{{'accompagnateurs'|translate}}</mat-label>
+                              <mat-select formControlName="accompagnateur_ids" multiple>
+                                <mat-option>--</mat-option>
+                                <mat-option *ngFor="let acc of accompagnateurs|async" [value]="acc.id">
+                                  {{acc.nom}} {{acc.prenom}}
+                                </mat-option>
+                              </mat-select>
+                              <app-error-form [field]="'accompagnateur_ids'" [form]="offreVoyage"></app-error-form>
+                            </mat-form-field>
+                            <button *ngIf="(userPermission|async).isAdmin||(userPermission|async).accompagnateur.edit"
+                                    (click)="addAccompagnateur()" mat-icon-button color="primary">
+                              <mat-icon>add_circle</mat-icon>
+                            </button>
+                          </div>
+                        </div>
+                        <div fxFlex="48" fxFlex.lt-md="100" fxLayout="row" fxLayoutAlign="space-between">
+                          <div fxFlex="48" fxLayout="row" fxLayoutAlign="space-between start">
+                            <mat-form-field fxFlex="80">
+                              <mat-label>{{'vehicule'|translate}}</mat-label>
+                              <mat-select formControlName="vehicule_id">
+                                <mat-option>--</mat-option>
+                                <mat-option *ngFor="let cat of vehicules|async" [value]="cat.id">
+                                  {{cat.type.nom + ' / Place :' + cat.place + ' / ' + cat.marque.nom}}
+                                </mat-option>
+                              </mat-select>
+                              <app-error-form [field]="'vehicule_id'" [form]="offreVoyage"></app-error-form>
+                            </mat-form-field>
+                            <button *ngIf="(userPermission|async).isAdmin||(userPermission|async).agence.edit"
+                                    (click)="addVehicule()" mat-icon-button color="primary">
+                              <mat-icon>add_circle</mat-icon>
+                            </button>
+                          </div>
+                          <div fxFlex="48" fxLayout="row" fxLayoutAlign="space-between start">
+                            <mat-form-field fxFlex="80">
+                              <mat-label>{{'Chauffeur'|translate}}</mat-label>
+                              <mat-select formControlName="chauffeur_id">
+                                <mat-option>--</mat-option>
+                                <mat-option *ngFor="let cat of chauffeurs|async" [value]="cat.id">
+                                  {{cat.nom}} {{cat.prenom}}
+                                </mat-option>
+                              </mat-select>
+                              <app-error-form [field]="'chauffeur_id'" [form]="offreVoyage"></app-error-form>
+                            </mat-form-field>
+                            <button *ngIf="(userPermission|async).isAdmin||(userPermission|async).chauffeur.edit"
+                                    (click)="addChauffeur()" mat-icon-button color="primary">
+                              <mat-icon>add_circle</mat-icon>
+                            </button>
+                          </div>
+
+                        </div>
+                      </div>
+                    </div>
+
+
+                  </ng-container>
+                  <mat-divider></mat-divider>
+                </div>
+              </div>
+
+            </div>
+
+            <div>
+              <button mat-button matStepperPrevious>Back</button>
+            </div>
+          </mat-step>
+        </mat-horizontal-stepper>
+      </form>
+    </mat-card-content>
+    <div class="spinner-wrapper transparent" *ngIf="isLoadingSpinner">
+      <mat-spinner diameter="60"></mat-spinner>
+    </div>
+  </mat-card>
+</div>
+
+

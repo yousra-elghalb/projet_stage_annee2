@@ -1,0 +1,109 @@
+<button mat-button (click)="donwload()">
+  <mat-icon color="primary">save_alt</mat-icon>
+</button>
+<div id="c" #content>
+  <div *ngFor=" let pGroupe of pGroupes">
+
+    <div *ngFor="let traite of pGroupe.traites" fxLayout="column" fxLayoutAlign="space-between"
+         class="facture-container">
+      <div fxLayout="row" fxLayoutAlign="space-between">
+        <img fxFlex="40" src="assets/logo.png">
+        <table width="100%" fxFlex="38">
+          <tr>
+            <td colspan="2">
+              <div style="padding: 10px;" *ngIf="traite.facture.num&&traite.facture.num!=''">
+                <strong>{{'Facture N° : '|translate}}{{traite.facture.num}}</strong></div>
+              <div *ngIf="!traite.facture.num||traite.facture.num==''" style="padding: 10px;">
+                <strong>{{'Facture Pro Format'}}</strong></div>
+            </td>
+          </tr>
+          <tr>
+            <td><strong>{{'date'|translate|uppercase}}</strong></td>
+            <td><strong>{{'ref'|translate|translate}}</strong></td>
+          </tr>
+          <tr>
+            <td>{{date|date:'dd/mm/yyyy'}}</td>
+            <td
+              *ngIf="traite.facture.num&&traite.facture.num!=''&&traite.facture.ref&&traite.facture.ref!=''">{{traite.facture.ref}}</td>
+            <td
+              *ngIf="traite.facture.num&&traite.facture.num!=''&&!(traite.facture.ref&&traite.facture.ref!='')">{{'Espece'|translate}}</td>
+          </tr>
+        </table>
+      </div>
+      <div fxLayout="row" fxLayoutAlign="space-between">
+        <div fxFlex="60">
+          <strong>{{'Siège Social: '|translate}}</strong> {{'adresseSiegeSocial'|translate}}
+        </div>
+        <div fxLayout="column" fxLayoutAlign="center center" fxFlex="22">
+          <strong>{{'Client au comptant'|translate}}</strong>
+          <strong>{{traite.facture.nom_voyageur}}</strong>
+          <strong>{{'cin'|translate|uppercase}} : {{traite.facture.cin}}</strong>
+        </div>
+      </div>
+      <table style="height: 100%;width: 100%;" fxFlex="60">
+        <tr style="height: 23px">
+          <td>{{'ref'|translate|uppercase}}</td>
+          <td width="40%">{{'Designation'|translate|uppercase}}</td>
+          <td>{{'qte'|translate|uppercase}}</td>
+          <td>{{'pu'|translate|uppercase}}</td>
+          <td *ngIf="pGroupe.totale_options&&pGroupe.totale_options>0">{{'option'|translate|uppercase}}</td>
+          <td *ngIf="pGroupe.reduction&&pGroupe.reduction>0">{{'reduction'|translate|uppercase}}</td>
+          <td>{{'montant tcc'|translate|uppercase}}</td>
+        </tr>
+        <tbody>
+        <tr>
+          <td>
+            <div>{{traite.facture.ref}}</div>
+          </td>
+          <td>
+            <div>{{traite.facture.desi}}</div>
+          </td>
+          <td>
+            <div>
+              <div>{{'adulte'|translate}} : {{pGroupe.qte}}</div>
+              <div *ngIf="pGroupe.qte_enfant&&pGroupe.qte_enfant>0">{{'enfant'|translate}}
+                : {{pGroupe.qte_enfant}}</div>
+              <div *ngIf="pGroupe.qte_bebe&&pGroupe.qte_bebe>0">{{'bebe'|translate}} : {{pGroupe.qte_bebe}}</div>
+            </div>
+          </td>
+          <td>
+            <div>
+              <div>{{'adulte'|translate}} : {{data.offreVoyage.prixAdulte}}</div>
+              <div *ngIf="data.offreVoyage.prixEnfant&&data.offreVoyage.prixEnfant>0">{{'enfant'|translate}}
+                : {{data.offreVoyage.prixEnfant}}</div>
+              <div *ngIf="pGroupe.qte_bebe&&pGroupe.qte_bebe>0">{{'bebe'|translate}}
+                : {{data.offreVoyage.prixBebe}}</div>
+            </div>
+          </td>
+          <td *ngIf="pGroupe.totale_options&&pGroupe.totale_options>0">
+            <div>{{pGroupe.totale_options}}</div>
+          </td>
+          <td *ngIf="pGroupe.reduction&&pGroupe.reduction>0">
+            <div>{{pGroupe.reduction}}</div>
+          </td>
+          <td>
+            <div>{{traite.facture.ttc}}</div>
+          </td>
+        </tr>
+        <tr style="height: 23px">
+          <td colspan="2"></td>
+          <td *ngIf="!(pGroupe.totale_options&&pGroupe.totale_options>0)&&!(pGroupe.reduction&&pGroupe.reduction>0)"
+              colspan="2">{{'TOTAL (TTC)'|translate}}</td>
+          <td *ngIf="(pGroupe.totale_options&&pGroupe.totale_options>0)&&!(pGroupe.reduction&&pGroupe.reduction>0)"
+              colspan="3">{{'TOTAL (TTC)'|translate}}</td>
+          <td *ngIf="!(pGroupe.totale_options&&pGroupe.totale_options>0)&&(pGroupe.reduction&&pGroupe.reduction>0)"
+              colspan="3">{{'TOTAL (TTC)'|translate}}</td>
+          <td *ngIf="(pGroupe.totale_options&&pGroupe.totale_options>0)&&(pGroupe.reduction&&pGroupe.reduction>0)"
+              colspan="4">{{'TOTAL (TTC)'|translate}}</td>
+          <td>{{traite.facture.ttc}}</td>
+        </tr>
+        </tbody>
+      </table>
+      <div fxLayout="column" fxLayoutAlign="center center">
+        <div>{{'AjiNsafro S.A.R.L'}}</div>
+        <div>{{'RC:70489 Tanger - TP : 50471316 - IF : 15254892 - ICE : 001585417000035 - CNSS : 5591278'}}</div>
+      </div>
+    </div>
+
+  </div>
+</div>

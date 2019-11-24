@@ -1,0 +1,119 @@
+<button mat-button
+        *ngIf="(userPermission|async).isAdmin||
+        ((userPermission|async).voyage.read)||((userPermission|async).offreVoyage.read)||(commercial|async).limitedAccess"
+        [matMenuTriggerFor]="Voyage">{{'Voyage'|translate}}</button>
+<mat-menu #Voyage="matMenu">
+  <a *ngIf="(userPermission|async).isAdmin||(userPermission|async).voyage.read" mat-menu-item
+     routerLink="/offreVoyage/calendar">{{'calendar'|translate}}</a>
+  <div *ngFor="let cat of (categoires|async)">
+    <a
+      *ngIf="(!(commercial|async).limitedAccess)&&((userPermission|async).isAdmin||(userPermission|async).offreVoyage.read)"
+      mat-menu-item
+      routerLink="/offreVoyage/list/{{cat.id}}">{{cat.nom|translate|titlecase}}</a>
+    <a *ngIf="(commercial|async).limitedAccess" mat-menu-item
+       routerLink="/offreVoyage/listOffreVoyageByCommercialExterne/{{cat.id}}">{{cat.nom|translate}}</a>
+  </div>
+  <a *ngIf="(userPermission|async).isAdmin||(userPermission|async).voyage.read" mat-menu-item
+     routerLink="/voyage/list">{{'liste des voyages'|translate}}</a>
+  <a *ngIf="(userPermission|async).isAdmin||(userPermission|async).voyage.edit" mat-menu-item
+     routerLink="/voyage/addvoyage">{{'Ajouter un voyage'|translate}}</a>
+</mat-menu>
+<button mat-button
+        *ngIf="(userPermission|async).isAdmin||(
+        (userPermission|async).voyageur.read)"
+        [matMenuTriggerFor]="voyageurs">{{'Clients'|translate}}</button>
+<mat-menu #voyageurs="matMenu">
+  <a *ngIf="(userPermission|async).isAdmin || (userPermission|async).voyageur.read" mat-menu-item
+     routerLink="/voyageur/list/0/0">{{'voyageurs'|translate}}</a>
+  <a *ngIf="(userPermission|async).isAdmin || (userPermission|async).voyageur.read" mat-menu-item
+     routerLink="/voyageur/list/1/0">{{'voyageurs fidèles'|translate}}</a>
+  <a *ngIf="(userPermission|async).isAdmin || (userPermission|async).voyageur.read" mat-menu-item
+     routerLink="/voyageur/list/61453/1">{{'Liste noire'|translate}}</a>
+  <a *ngIf="(userPermission|async).isAdmin || (userPermission|async).groupeConvention.read" mat-menu-item
+     routerLink="/groupeConvention">{{'Groupes avec convention'|translate}}</a>
+</mat-menu>
+<button mat-button
+        *ngIf="(userPermission|async).isAdmin||(
+        (userPermission|async).hotel.read)"
+        [matMenuTriggerFor]="Hotel">{{'hébergement'|translate}}</button>
+<mat-menu #Hotel="matMenu">
+  <a *ngIf="(userPermission|async).isAdmin || (userPermission|async).hotel.read" mat-menu-item
+     routerLink="/hotel">{{'hébergements'|translate}}</a>
+</mat-menu>
+<button mat-button
+        *ngIf="(userPermission|async).isAdmin    ||
+        ((userPermission|async).societe.read     ||
+        (userPermission|async).vehicule.read     ||
+        (userPermission|async).typeVehicule.read     ||
+        (userPermission|async).marqueVehicule.read   )"
+        [matMenuTriggerFor]="Transport">
+  {{'Transport'|translate}}
+</button>
+<mat-menu #Transport="matMenu">
+  <a *ngIf="(userPermission|async).isAdmin || (userPermission|async).societe.read" mat-menu-item
+     routerLink="/societe">{{'societe'|translate}}</a>
+  <a *ngIf="(userPermission|async).isAdmin || (userPermission|async).vehicule.read" mat-menu-item
+     routerLink="/vehicule">{{'vehicule'|translate}}</a>
+  <a
+    *ngIf="(userPermission|async).isAdmin || (userPermission|async).typeVehicule.read" mat-menu-item
+    routerLink="/typeVehicule">{{'typeVehicule'|translate}}</a>
+  <a
+    *ngIf="(userPermission|async).isAdmin || (userPermission|async).marqueVehicule.read" mat-menu-item
+    routerLink="/marqueVehicule">{{'marqueVehicule'|translate}}</a>
+</mat-menu>
+<button mat-button
+        *ngIf="(userPermission|async).isAdmin||(
+        (userPermission|async).commercial.read||
+        (userPermission|async).chauffeur.read ||
+        (userPermission|async).accompagnateur.read
+                     )"
+        [matMenuTriggerFor]="personnes">{{'personnel'|translate}}</button>
+<mat-menu #personnes="matMenu">
+  <a *ngIf="(userPermission|async).isAdmin||(userPermission|async).commercial.read" mat-menu-item
+     routerLink="/commercial/list/no">{{'commerciaux'|translate}}</a>
+  <a *ngIf="(userPermission|async).isAdmin||(userPermission|async).commercial.read" mat-menu-item
+     routerLink="/commercial/list/yes">{{'points de vente'|translate}}</a>
+  <a *ngIf="(userPermission|async).isAdmin || (userPermission|async).accompagnateur.read" mat-menu-item
+     routerLink="/accompagnateur">{{'accompagnateurs'|translate}}</a>
+  <a *ngIf="(userPermission|async).isAdmin || (userPermission|async).chauffeur.read" mat-menu-item
+     routerLink="/chauffeur">{{'chauffeurs'|translate}}</a>
+</mat-menu>
+
+<button mat-button
+        *ngIf="(userPermission|async).isAdmin    ||
+        ((userPermission|async).ville.read       ||
+        (userPermission|async).categorie.read    ||
+        (userPermission|async).sousCategorie.read||
+        (userPermission|async).agence.read       ||
+        (userPermission|async).modalite.read     ||
+        (userPermission|async).depense.read     ||
+        (userPermission|async).pays.read)"
+        [matMenuTriggerFor]="application">
+  {{'paramètres'|translate}}
+</button>
+<mat-menu #application="matMenu">
+  <a
+    *ngIf="(userPermission|async).isAdmin || (userPermission|async).ville.read" mat-menu-item
+    routerLink="/ville">{{'Ville'|translate}}</a>
+  <a *ngIf="(userPermission|async).isAdmin || (userPermission|async).pays.read" mat-menu-item
+     routerLink="/pays">{{'Pays'|translate}}</a>
+  <a *ngIf="(userPermission|async).isAdmin || (userPermission|async).categorie.read" mat-menu-item
+     routerLink="/categorie">{{'Categorie'|translate}}</a>
+  <a *ngIf="(userPermission|async).isAdmin || (userPermission|async).sousCategorie.read" mat-menu-item
+     routerLink="/sousCategorie">{{'Sous Categorie'|translate}}</a>
+  <a *ngIf="(userPermission|async).isAdmin || (userPermission|async).agence.read" mat-menu-item
+     routerLink="/agence">{{'Agence'|translate}}</a>
+  <a *ngIf="(userPermission|async).isAdmin || (userPermission|async).modalite.read" mat-menu-item
+     routerLink="/modalite">{{'Modelité de paiement'|translate}}</a>
+  <a
+    *ngIf="(userPermission|async).isAdmin || (userPermission|async).depense.read" mat-menu-item
+    routerLink="/depense">{{'Depense'|translate}}</a>
+  <a
+    *ngIf="(userPermission|async).isAdmin || (userPermission|async).option.read" mat-menu-item
+    routerLink="/option">{{'Options'|translate}}</a>
+</mat-menu>
+
+<button mat-button
+        *ngIf="(userPermission|async).isAdmin||((userPermission|async).role.read)"
+        routerLink="/role">{{'Permissions'|translate}}</button>
+

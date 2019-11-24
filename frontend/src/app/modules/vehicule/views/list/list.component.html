@@ -1,0 +1,77 @@
+<app-sub-header subHeaderTitre="{{'List Vehicules'|translate}}">
+  <div fxFlex menu>
+    <app-sub-header-search [totale]="dataSource.data.length" (onsearch)="onSearch($event)"></app-sub-header-search>
+  </div>
+  <button *ngIf="(userPermission|async).isAdmin||(userPermission|async).pays.edit" color="primary" toolbar
+          mat-stroked-button
+          (click)="newElement()">{{'Ajouter'| translate}}</button>
+</app-sub-header>
+<div class="container">
+
+  <mat-card *ngIf="dataSource.data.length==0" fxLayoutAlign="center center" class="table-wrapper">
+    <div>
+      {{'aucune donnée'|translate}}
+    </div>
+  </mat-card>
+  <mat-card *ngIf="dataSource.data.length>0" class="table-wrapper">
+    <div class="table-container-responsive">
+      <table mat-table [dataSource]="dataSource">
+
+        <!-- Position Column -->
+        <ng-container matColumnDef="id">
+          <th mat-header-cell *matHeaderCellDef> {{'id'|translate}}</th>
+          <td mat-cell *matCellDef="let element"> {{element.id}} </td>
+        </ng-container>
+
+        <!-- Name Column -->
+        <ng-container matColumnDef="immatriculation" sticky>
+          <th mat-header-cell *matHeaderCellDef> {{'immatriculation'|translate}}</th>
+          <td mat-cell *matCellDef="let element"> {{element.immatriculation}} </td>
+        </ng-container>
+        <ng-container matColumnDef="place">
+          <th mat-header-cell *matHeaderCellDef> {{'nombre de place'|translate}}</th>
+          <td mat-cell *matCellDef="let element"> {{element.place}} </td>
+        </ng-container>
+        <ng-container matColumnDef="date_ex_assurance">
+          <th mat-header-cell *matHeaderCellDef> {{'date expiration assurance'|translate}}</th>
+          <td mat-cell *matCellDef="let element"> {{element.date_ex_assurance}} </td>
+        </ng-container>
+        <ng-container matColumnDef="type">
+          <th mat-header-cell *matHeaderCellDef> {{'type'|translate}}</th>
+          <td mat-cell *matCellDef="let element"> {{element.type.nom}} </td>
+        </ng-container>
+        <ng-container matColumnDef="marque">
+          <th mat-header-cell *matHeaderCellDef> {{'marque'|translate}}</th>
+          <td mat-cell *matCellDef="let element"> {{element.marque.nom}} </td>
+        </ng-container>
+        <ng-container matColumnDef="societe">
+          <th mat-header-cell *matHeaderCellDef> {{'societe'|translate}}</th>
+          <td mat-cell *matCellDef="let element">
+            <div *ngIf="element.societe"> {{element.societe.nom}}</div>
+            <div *ngIf="!element.societe"> {{'Aji Nsafro'|translate}}</div>
+          </td>
+        </ng-container>
+        <!-- actions Column -->
+
+        <ng-container matColumnDef="actions" stickyEnd>
+          <th class="actions" mat-header-cell *matHeaderCellDef> {{'Actions'|translate}}</th>
+          <td mat-cell *matCellDef="let element">
+            <button *ngIf="(userPermission|async).isAdmin||(userPermission|async).pays.edit"
+                    (click)="update(element.id)"
+                    mat-icon-button color="primary" aria-label="modifier">
+              <mat-icon>edit</mat-icon>
+            </button>
+            <button *ngIf="(userPermission|async).isAdmin||(userPermission|async).pays.delete"
+                    (click)="delete(element.id)"
+                    mat-icon-button color="primary" aria-label="Supprimer">
+              <mat-icon>delete</mat-icon>
+            </button>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+    </div>
+  </mat-card>
+</div>

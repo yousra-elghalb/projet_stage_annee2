@@ -1,0 +1,111 @@
+<button mat-button (click)="donwload()">
+  <mat-icon color="primary">save_alt</mat-icon>
+</button>
+<div id="c" #content>
+  <div fxLayout="column" fxLayoutAlign="space-between" class="facture-container">
+    <div fxLayout="row" fxLayoutAlign="space-between">
+      <div fxLayout="column" fxLayoutAlign="center center" fxFlex="40">
+        <img style="max-height: 60px" src="assets/logo.png">
+      </div>
+      <table width="100%" fxFlex="38">
+        <tr>
+          <td colspan="2">
+            <div style="padding: 10px;" *ngIf="facture.num&&facture.num!=''">
+              <strong>{{'Facture N° : '|translate}}{{facture.num}}</strong></div>
+            <div *ngIf="!facture.num||facture.num==''" style="padding: 10px;">
+              <strong>{{'Facture Pro Format'}}</strong></div>
+          </td>
+        </tr>
+        <tr>
+          <td><strong>{{'date'|translate|uppercase}}</strong></td>
+          <td *ngIf="facture.num&&facture.num!=''"><strong>{{'ref'|translate|translate}}</strong></td>
+        </tr>
+        <tr>
+          <td>{{date|date:'dd/mm/yyyy'}}</td>
+          <td *ngIf="facture.num&&facture.num!=''&&facture.ref&&facture.ref!=''">{{facture.ref}}</td>
+          <td *ngIf="facture.num&&facture.num!=''&&!(facture.ref&&facture.ref!='')">{{'Espece'|translate}}</td>
+        </tr>
+      </table>
+    </div>
+    <div fxLayout="row" fxLayoutAlign="space-between">
+      <div fxFlex="60">
+        <strong>{{'Siège Social: '|translate}}</strong> {{'adresseSiegeSocial'|translate}}
+      </div>
+      <div fxLayout="column" fxLayoutAlign="center center" fxFlex="22">
+        <strong>{{'Client au comptant'|translate}}</strong>
+        <div fxLayout="column" fxLayoutAlign="center center" *ngIf="facture.nom_voyageur&&facture.nom_voyageur!=''">
+          <strong>{{facture.nom_voyageur}}</strong>
+          <strong>{{'cin'|translate|uppercase}} : {{facture.cin}}</strong>
+        </div>
+        <div fxLayout="column" fxLayoutAlign="center center" *ngIf="facture.nom_groupe&&facture.nom_groupe!=''">
+          <strong>{{facture.nom_groupe}}</strong>
+          <strong>{{'ice'|translate|uppercase}} : {{facture.ice}}</strong>
+        </div>
+      </div>
+    </div>
+    <table style="height: 100%;width: 100%;" fxFlex="60">
+      <tr style="height: 23px">
+        <td>{{'ref'|translate|uppercase}}</td>
+        <td width="40%">{{'Designation'|translate|uppercase}}</td>
+        <td>{{'qte'|translate|uppercase}}</td>
+        <td>{{'pu'|translate|uppercase}}</td>
+        <td *ngIf="options>0">{{'option'|translate|uppercase}}</td>
+        <td *ngIf="data.sGroupe.reduction>0">{{'reduction'|translate|uppercase}}</td>
+        <td>{{'montant tcc'|translate|uppercase}}</td>
+      </tr>
+      <tbody>
+      <tr>
+        <td>
+          <div>{{facture.ref}}</div>
+        </td>
+        <td>
+          <div>{{facture.desi}}</div>
+        </td>
+        <td>
+          <div>
+            <div *ngIf="qte>0">{{'adulte'|translate}} : {{qte}}</div>
+            <div *ngIf="qteEnfant>0">{{'enfant'|translate}} : {{qteEnfant}}</div>
+            <div *ngIf="qteBebe>0">{{'bebe'|translate}} : {{qteBebe}}</div>
+          </div>
+        </td>
+        <td>
+          <div>
+            <div *ngIf="qte>0">{{'adulte'|translate}} : {{data.offreVoyage.prixAdulte}}</div>
+            <div *ngIf="qteEnfant>0">{{'enfant'|translate}} : {{data.offreVoyage.prixEnfant}}</div>
+            <div *ngIf="qteBebe>0">{{'bebe'|translate}} : {{data.offreVoyage.prixBebe}}</div>
+          </div>
+        </td>
+        <td *ngIf="options>0">
+          <div>{{options}}</div>
+        </td>
+        <td *ngIf="data.sGroupe.reduction>0">
+          <div>{{data.sGroupe.reduction}}</div>
+        </td>
+        <td>
+          <div>{{facture.ttc}}</div>
+        </td>
+      </tr>
+      <tr style="height: 23px">
+        <td colspan="2"></td>
+        <td
+          *ngIf="!(options&&options>0)&&!(data.sGroupe.reduction&&data.sGroupe.reduction>0)"
+          colspan="2">{{'TOTAL (TTC)'|translate}}</td>
+        <td
+          *ngIf="(options&&options>0)&&!(data.sGroupe.reduction&&data.sGroupe.reduction>0)"
+          colspan="3">{{'TOTAL (TTC)'|translate}}</td>
+        <td
+          *ngIf="!(options&&options>0)&&(data.sGroupe.reduction&&data.sGroupe.reduction>0)"
+          colspan="3">{{'TOTAL (TTC)'|translate}}</td>
+        <td
+          *ngIf="(options&&options>0)&&(data.sGroupe.reduction&&data.sGroupe.reduction>0)"
+          colspan="4">{{'TOTAL (TTC)'|translate}}</td>
+        <td>{{facture.ttc}}</td>
+      </tr>
+      </tbody>
+    </table>
+    <div fxLayout="column" fxLayoutAlign="center center">
+      <div>{{'AjiNsafro S.A.R.L'}}</div>
+      <div>{{'RC:70489 Tanger - TP : 50471316 - IF : 15254892 - ICE : 001585417000035 - CNSS : 5591278'}}</div>
+    </div>
+  </div>
+</div>

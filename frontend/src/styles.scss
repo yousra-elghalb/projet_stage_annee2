@@ -1,0 +1,304 @@
+/* You can add global styles to this file, and also import other style files */
+//@import "~@angular/material/prebuilt-themes/deeppurple-amber.css";
+@import "../node_modules/angular-calendar/css/angular-calendar.css";
+
+body {
+  background: #f2f3f8;
+}
+
+body, html {
+  font-size: 13px;
+  font-weight: 300;
+}
+
+body {
+  line-height: 1.5;
+  text-align: left;
+}
+
+body, html {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  font-size: 13px;
+  font-weight: 300;
+  font-family: Poppins;
+  -ms-text-size-adjust: 100%;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+*, ::after, ::before {
+  box-sizing: border-box;
+}
+
+
+//debut Menu header *****************************************
+.header_menu_wrapper {
+  opacity: 1;
+}
+
+.header-menu {
+  display: flex;
+  align-items: stretch;
+  height: 100%;
+  margin: 0 0 0 25px;
+}
+
+.header-menu .menu-nav {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  align-items: stretch;
+}
+
+.header-menu .menu-nav > .menu-item:first-child {
+  padding-left: 0;
+}
+
+.header-menu .menu-nav > .menu-item.menu-item-rel {
+  position: relative;
+}
+
+.header-menu .menu-nav > .menu-item {
+  display: flex;
+  align-items: center;
+  padding: 0 .25rem;
+  padding: 0 .25rem;
+  padding-left: 0.25rem;
+}
+
+//fin header menu *****************************************
+
+//debu aside menu *****************************************
+.mat-drawer.mat-drawer-side {
+  z-index: 100 !important;
+}
+
+//fin aside menu *****************************************
+
+//debut header_mobile ********************************************
+.header-mobile.header-mobile--fixed {
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: 0;
+  z-index: 97;
+}
+
+.header-mobile {
+  //background-color: #1a1a27;
+  box-shadow: 0 1px 9px -3px rgba(0, 0, 0, .1);
+}
+
+.header-mobile {
+  display: flex;
+  justify-content: space-between;
+  padding: 0 15px;
+  height: 50px;
+  min-height: 50px;
+  position: relative;
+  z-index: 1;
+}
+
+.header-mobile .header-mobile-logo {
+
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+
+}
+
+.header-mobile .header-mobile-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+//fin header_mobile ********************************************
+
+//DLayout********************************************
+
+/*.content {
+  padding: 25px 0;
+}*/
+
+
+.container {
+  margin: 25px;
+}
+
+//fin container********************************************
+
+// Dspinner-wrapper solid
+.spinner-wrapper.solid {
+  background-color: white;
+}
+
+.spinner-wrapper.transparent {
+  background-color: rgba(255, 249, 254, 0.29);
+}
+
+.spinner-parent-wrapper {
+  position: relative;
+}
+
+.spinner-wrapper {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  .solid {
+    background-color: white;
+  }
+}
+
+
+@media (min-width: 1025px) {
+
+
+  //DLayout********************************************
+  /* .kt-header--fixed.kt-subheader--fixed.kt-subheader--enabled .kt-wrapper {
+     padding-top: 119px;
+   }*/
+  .aside-enable {
+    /* .wrapper {
+       padding-left: 250px !important;
+       padding-top: 119px !important;
+     }*/
+
+    .header, .subheader {
+      left: 250px !important;
+    }
+  }
+  //FLayout
+}
+
+// Small devices (landscape phones, 576px and up)
+@media (min-width: 576px) {
+}
+
+// Medium devices (tablets, 768px and up)
+@media (min-width: 768px) {
+}
+
+// Large devices (desktops, 992px and up)
+@media (min-width: 992px) {
+
+}
+
+
+// Extra large devices (large desktops, 1200px and up)
+@media (min-width: 1200px) {
+}
+
+.root-mat-progress-bar {
+  position: absolute !important;
+  height: 2px !important;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 200;
+}
+
+
+// image
+
+.image-wrapper {
+  position: relative;
+  width: 150px;
+  margin: 15px;
+
+  img {
+    border-radius: 10px;
+  }
+
+  .btn-remove {
+    position: absolute;
+    height: 30px;
+    width: 30px;
+    top: -15px;
+    right: -15px;
+  }
+}
+
+// mat-card
+
+.my-card-action > button, .my-card-action a {
+  margin-right: 10px;
+}
+
+// my-list
+
+.my-list {
+  max-height: 400px;
+  min-height: 400px;
+  overflow: auto;
+
+  .mat-list-item-content {
+    justify-content: space-between;
+  }
+
+  .mat-list-item {
+    margin-bottom: 10px;
+  }
+
+}
+
+.villes > :not(:last-child)::after {
+  content: ', ';
+}
+
+.mat-success {
+  background-color: green;
+  color: #fff;
+}
+
+.mat-chip-table {
+  mat-chip {
+
+  }
+}
+
+.mat-toolbar .mat-form-field {
+  font-size: 14px !important;
+  font-weight: 100 !important;
+}
+
+
+// dialog
+
+.custom-dialog-container .mat-dialog-container {
+  padding: 5px;
+}
+
+//table
+
+.table-container-responsive {
+  overflow-x: auto;
+
+  .mat-header-cell {
+    font-size: 10px;
+  }
+
+  .mat-cell, .mat-footer-cell {
+
+    font-size: 11px;
+
+  }
+
+  .mat-standard-chip {
+    min-height: 22px;
+  }
+
+  .mat-chip {
+    font-size: 10px;
+  }
+}
+

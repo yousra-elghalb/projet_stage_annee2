@@ -1,0 +1,40 @@
+<h2 mat-dialog-title>{{'Modifier Ville'|translate}}</h2>
+<div mat-dialog-content>
+  <form [formGroup]="elementForm" (ngSubmit)="save()">
+    <div fxLayout="column" fxLayoutAlign="end">
+      <mat-form-field>
+        <label>
+          <input matInput placeholder="{{'Nom'|translate}}" formControlName="nom">
+        </label>
+        <app-error-form [field]="'nom'" [form]="elementForm"></app-error-form>
+      </mat-form-field>
+      <div fxLayout="row" fxLayoutAlign="space-between start">
+        <mat-form-field fxFlex>
+          <mat-label>{{'Pays'|translate}}</mat-label>
+          <mat-select [(value)]="selectedPays" formControlName="pays_id" required>
+            <mat-option>--</mat-option>
+            <mat-option *ngFor="let pays of $pays|async" [value]="pays.id">
+              {{pays.nom}}
+            </mat-option>
+          </mat-select>
+          <app-error-form [field]="'pays_id'" [form]="elementForm"></app-error-form>
+        </mat-form-field>
+        <button *ngIf="(userPermission|async).isAdmin||(userPermission|async).pays.edit" (click)="addPays()"
+                mat-icon-button color="primary">
+          <mat-icon>add_circle</mat-icon>
+        </button>
+      </div>
+    </div>
+  </form>
+  <div class="spinner-wrapper solid" *ngIf="isLoadingSpinner">
+    <mat-spinner diameter="60"></mat-spinner>
+  </div>
+</div>
+<div fxLayout="row" fxLayoutAlign="end" mat-dialog-actions>
+  <button color="primary" style="margin-right: 10px" mat-raised-button
+          (click)="close()">{{'annuler'|translate}}</button>
+  <button color="primary" mat-raised-button [disabled]="!elementForm.valid"
+          (click)="save()">{{'Update'|translate}}</button>
+</div>
+
+

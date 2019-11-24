@@ -1,0 +1,44 @@
+table {
+  width: 100%;
+}
+
+.table-container-responsive {
+  table {
+    min-width: 1300px;
+  }
+}
+
+.chip-list-facture {
+  color: white;
+
+  .mat-chip.mat-standard-chip.mat-chip-selected.oui {
+    background-color: #4caf50 !important;
+
+  }
+
+  .mat-chip.mat-standard-chip.mat-chip-selected.nom {
+    background-color: #d32f2f !important;
+  }
+}
+
+.mat-column-actions {
+  width: 20px;
+}
+
+.element-list {
+  position: relative;
+
+  .my-mat-divider {
+    margin: 3px auto;
+  }
+}
+
+mat-card-header {
+  padding-bottom: 15px;
+}
+
+.input-headline {
+  font-size: 15px;
+  margin-right: 15px;
+}
+

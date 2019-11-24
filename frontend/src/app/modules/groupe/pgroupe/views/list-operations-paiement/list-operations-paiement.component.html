@@ -1,0 +1,42 @@
+<h2 mat-dialog-title>{{'Opérations'|translate}}</h2>
+<div mat-dialog-content>
+  <div fxLayout="column"
+       *ngFor="let traite of data.pGroupe.paiement.traites;">
+    <div fxFlex="100" fxLayout="row" fxLayoutAlign="space-between">
+      <mat-form-field fxFlex.lt-md="100" fxFlex="20">
+        <label>
+          <input matInput placeholder="{{'montant'|translate}}" [value]="traite.montant" readonly>
+        </label>
+      </mat-form-field>
+      <mat-form-field fxFlex.lt-md="100" fxFlex="20">
+        <label>
+          <input matInput placeholder="{{'modalite'|translate}}" [value]="traite.modalite.nom" readonly>
+        </label>
+      </mat-form-field>
+      <div fxFlex.lt-md="100" fxFlex="10" fxLayout="row" fxLayoutAlign="center">
+        <button
+          (click)="openIframe(traite.pieceJointe)" mat-icon-button>
+          <mat-icon>image_search</mat-icon>
+        </button>
+      </div>
+      <div>
+        <button
+          *ngIf="(userPermission|async).isAdmin||
+          ((userPermission|async).facture.edit)"
+          (click)="editFacture(traite)"
+          mat-stroked-button color="primary">
+          <mat-icon color="primary">edit</mat-icon>
+          {{'facture'|translate}}
+        </button>
+        <button *ngIf="traite.facture&&(userPermission|async).isAdmin||
+          ((userPermission|async).facture.read)"
+                (click)="printFacture(traite)"
+                mat-stroked-button color="primary">
+          <mat-icon color="primary">print</mat-icon>
+          {{((traite.facture.num) ? 'facture' : 'Facture Pro Format')|translate}}
+        </button>
+      </div>
+      <mat-divider></mat-divider>
+    </div>
+  </div>
+</div>

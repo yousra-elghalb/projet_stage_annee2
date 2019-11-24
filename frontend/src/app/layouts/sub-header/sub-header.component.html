@@ -1,0 +1,16 @@
+<mat-toolbar class="subheader subheader-fixed">
+  <div fxLayout="row" fxLayout.lt-md="column" fxLayoutAlign.gt-md="space-between center" class="subheader-container ">
+    <div fxFlex fxLayout="row" fxLayoutAlign=" center" class="subheader-main">
+      <h2 class="mat-h2 mat-title">{{ subHeaderTitre | translate }}</h2>
+      <mat-divider vertical></mat-divider>
+      <ng-content select="[menu]">
+
+      </ng-content>
+    </div>
+    <div class="subheader-toolbar">
+      <ng-content select="[toolbar]">
+
+      </ng-content>
+    </div>
+  </div>
+</mat-toolbar>

@@ -1,0 +1,28 @@
+.mat-expansion-panel {
+  box-shadow: none !important;
+}
+
+.mat-list-item {
+  height: 44px !important;
+}
+
+.active {
+  background: rgba(0, 0, 0, 0.04);
+}
+
+.my-menu-item:hover {
+  background: rgba(0, 0, 0, 0.04);
+  color: black;
+}
+
+.my-menu-item {
+  display: block;
+  height: 44px;
+  padding: 0px 24px;
+  text-decoration-line: initial;
+  line-height: 44px;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+  font-size: 15px;
+  font-weight: 400;
+  color: black;
+}

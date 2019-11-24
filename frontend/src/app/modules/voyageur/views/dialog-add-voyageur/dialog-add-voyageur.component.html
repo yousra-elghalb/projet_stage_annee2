@@ -1,0 +1,104 @@
+<h2 mat-dialog-title>{{'Nouveau Voyageur'|translate}}</h2>
+<div fxLayout="column" fxLayoutAlign="start" mat-dialog-content>
+  <form *ngIf="!isLoadingSpinner" [formGroup]="elementForm">
+    <div fxLayout="column" fxLayoutAlign="end">
+      <div fxLayout="row" fxLayoutAlign="space-between">
+        <mat-form-field fxFlex="85">
+          <input (ngModelChange)="onSearchSelectGroupeConvention($event)" type="text"
+                 placeholder="Société ou Famille"
+                 aria-label="Number" matInput formControlName="groupe_convention"
+                 [matAutocomplete]="auto">
+          <button class="btn-remove" *ngIf="elementForm.value.groupe_convention_id" mat-icon-button matSuffix
+                  (click)="onClearSelectedGroupeConvention()">
+            <mat-icon>clear</mat-icon>
+          </button>
+          <mat-autocomplete (optionSelected)="onSelectGroupeConvention($event)" autoActiveFirstOption
+                            #auto="matAutocomplete">
+            <mat-option *ngFor="let option of groupesConvention | async" [value]="option">
+              {{option.nom}}
+            </mat-option>
+          </mat-autocomplete>
+        </mat-form-field>
+        <button (click)="addGroupeConvention()" mat-icon-button color="primary" aria-label="add">
+          <mat-icon>add_circle</mat-icon>
+        </button>
+      </div>
+      <mat-form-field>
+        <label>
+          <input matInput placeholder="{{'cin'|translate}}" formControlName="cin">
+        </label>
+        <app-error-form [field]="'cin'" [form]="elementForm"></app-error-form>
+      </mat-form-field>
+      <mat-checkbox formControlName="black">{{'black list'|translate}}</mat-checkbox>
+      <mat-form-field>
+        <label>
+          <input matInput placeholder="{{'Nom'|translate}}" formControlName="nom">
+        </label>
+        <app-error-form [field]="'nom'" [form]="elementForm"></app-error-form>
+      </mat-form-field>
+      <mat-form-field>
+        <label>
+          <input matInput placeholder="{{'prenom'|translate}}" formControlName="prenom">
+        </label>
+        <app-error-form [field]="'prenom'" [form]="elementForm"></app-error-form>
+      </mat-form-field>
+      <mat-form-field>
+        <label>
+          <input matInput placeholder="{{'tel'|translate}}" formControlName="tel">
+        </label>
+        <app-error-form [field]="'tel'" [form]="elementForm"></app-error-form>
+      </mat-form-field>
+      <mat-form-field>
+        <label>
+          <input matInput placeholder="{{'email'|translate}}" formControlName="email">
+        </label>
+        <app-error-form [field]="'email'" [form]="elementForm"></app-error-form>
+      </mat-form-field>
+      <div fxLayout="row" fxLayout.lt-sm="column" fxLayoutAlign="space-between">
+        <mat-form-field fxFlex.lt-sm="100" fxFlex="48">
+          <mat-label>{{'sexe'|translate}}</mat-label>
+          <mat-select formControlName="sexe" required>
+            <mat-option value="homme">{{'homme'|translate}}</mat-option>
+            <mat-option value="femme">{{'femme'|translate}}</mat-option>
+          </mat-select>
+          <app-error-form [field]="'sexe'" [form]="elementForm"></app-error-form>
+        </mat-form-field>
+        <mat-form-field fxFlex.lt-sm="100" fxFlex="48">
+          <mat-label>{{'stadeVie'|translate}}</mat-label>
+          <mat-select formControlName="stadeVie" required>
+            <mat-option value="adulte">{{'adulte'|translate}}</mat-option>
+            <mat-option value="enfant">{{'enfant'|translate}}</mat-option>
+            <mat-option value="bébé">{{'bébé'|translate}}</mat-option>
+          </mat-select>
+          <app-error-form [field]="'stadeVie'" [form]="elementForm"></app-error-form>
+        </mat-form-field>
+      </div>
+      <div fxLayout="row" fxLayout.lt-sm="column" fxLayoutAlign="space-between">
+        <mat-form-field fxFlex.lt-sm="100" fxFlex="48">
+          <label>
+            <input matInput placeholder="{{'numPasseport'|translate}}" formControlName="numPasseport">
+          </label>
+          <app-error-form [field]="'numPasseport'" [form]="elementForm"></app-error-form>
+        </mat-form-field>
+        <mat-form-field fxFlex.lt-sm="100" fxFlex="48">
+          <input formControlName="dateExpiration" matInput [matDatepicker]="picker"
+                 placeholder="{{'dateExpiration'|translate}}">
+          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+          <app-error-form [field]="'dateExpiration'" [form]="elementForm"></app-error-form>
+        </mat-form-field>
+      </div>
+    </div>
+
+  </form>
+  <div class="spinner-wrapper solid" *ngIf="isLoadingSpinner||(isLoading|async)">
+    <mat-spinner diameter="60"></mat-spinner>
+  </div>
+</div>
+<div fxLayout="row" fxLayoutAlign="end" mat-dialog-actions>
+  <button color="primary" style="margin-right: 10px" mat-raised-button (click)="reset()">{{'reset'|translate}}</button>
+  <button color="primary" mat-raised-button [disabled]="!elementForm.valid"
+          (click)="save()">{{'Save'|translate}}</button>
+</div>
+
+

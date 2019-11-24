@@ -1,0 +1,59 @@
+table {
+  width: 100%;
+}
+
+
+.mat-column-actions {
+  width: 105px;
+}
+
+.table-container-responsive {
+  table {
+    min-width: 900px;
+  }
+}
+
+.no-fidele {
+  .mat-icon {
+    color: #958e8e !important;
+
+    .mat-badge-content {
+      background-color: #958e8e !important;
+    }
+  }
+}
+
+.black-list {
+  .mat-icon {
+    color: #000000 !important;
+
+    .mat-badge-content {
+      background-color: #958e8e !important;
+    }
+  }
+}
+
+.fidele {
+  .faan.mat-icon {
+    .mat-badge-content {
+      background-color: #4caf50 !important;
+    }
+  }
+
+  .fanp.mat-icon {
+    .mat-badge-content {
+      background-color: #e64a19 !important;
+    }
+  }
+
+  .fdan.mat-icon {
+    .mat-badge-content {
+      background-color: #1976d2 !important;
+    }
+  }
+
+  .mat-icon {
+    color: #d32f2f !important;
+
+  }
+}

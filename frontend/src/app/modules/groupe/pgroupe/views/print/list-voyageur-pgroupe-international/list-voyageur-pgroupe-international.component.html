@@ -1,0 +1,119 @@
+<button mat-button (click)="donwload()">
+  <mat-icon color="primary">save_alt</mat-icon>
+</button>
+<div id="c" #content>
+  <div style="padding: 100px 40px 0px 40px;width: 21cm;" fxLayout="column">
+    <div style="margin-bottom: 15px" fxLayout="row" fxLayoutAlign="space-between center">
+      <table fxFlex="77" class="root" width="100%">
+        <tr>
+          <td colspan="3">
+            {{offreVoyage.voyage.nom + ' ' + offreVoyage.suffixe}} | Du {{offreVoyage.dateDepart|date:'dd'}}
+            Au {{offreVoyage.dateDarrive|date:'dd MMMM yyyy'}}</td>
+        </tr>
+        <tr>
+          <td class="black" colspan="2">{{'ACCOMPAGNATEUR'|translate}}</td>
+          <td><span class="acc"
+                    *ngFor="let v of offreVoyage.accompagnateurs">{{v.prenom + ' ' + v.nom |uppercase}}</span>
+          </td>
+        </tr>
+      </table>
+      <img style="padding:0px 15px" fxFlex="20" src="assets/logo.png">
+    </div>
+    <table class="root" width="100%">
+      <tr class="black">
+        <td>N°</td>
+        <td>{{'Nom'|translate}}</td>
+        <td>{{'Prenom'|translate}}</td>
+        <td>{{'CIN'|translate}}</td>
+        <td>{{'Téléphone'|translate}}</td>
+        <td>{{'N° de Passport'|translate}}</td>
+        <td>{{'date dexpiration'|translate}}</td>
+        <td>{{'Option'|translate}}</td>
+        <td>{{'Depart'|translate}}</td>
+      </tr>
+      <tr *ngFor="let g of pGroupes">
+        <td>
+          <table>
+            <tr *ngFor="let p of g.voyageurs">
+              <td>
+                {{p.id}}
+              </td>
+            </tr>
+          </table>
+        </td>
+        <td>
+          <table>
+            <tr *ngFor="let p of g.voyageurs">
+              <td>
+                {{p.nom }}
+              </td>
+            </tr>
+          </table>
+        </td>
+        <td>
+          <table>
+            <tr *ngFor="let p of g.voyageurs">
+              <td>
+                {{ p.prenom}}
+              </td>
+            </tr>
+          </table>
+        </td>
+        <td>
+          <table>
+            <tr *ngFor="let p of g.voyageurs">
+              <td>
+                {{p.cin}}
+              </td>
+            </tr>
+          </table>
+        </td>
+        <td>
+          <table>
+            <tr *ngFor="let p of g.voyageurs">
+              <td>
+                {{p.tel}}
+              </td>
+            </tr>
+          </table>
+        </td>
+        <td>
+          <table>
+            <tr *ngFor="let p of g.voyageurs">
+              <td>
+                {{p.numPasseport}}
+              </td>
+            </tr>
+          </table>
+        </td>
+        <td>
+          <table>
+            <tr *ngFor="let p of g.voyageurs">
+              <td>
+                {{p.dateExpiration}}
+              </td>
+            </tr>
+          </table>
+        </td>
+        <td>
+          <table>
+            <tr>
+              <td [attr.rowspan]="g.voyageurs.length">
+                {{(g.options && g.options.length > 0) ? ('oui'|translate) : ('nom'|translate)}}
+              </td>
+            </tr>
+          </table>
+        </td>
+        <td>
+          <table>
+            <tr>
+              <td [attr.rowspan]="g.voyageurs.length">
+                {{g.ville.nom}}
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </div>
+</div>

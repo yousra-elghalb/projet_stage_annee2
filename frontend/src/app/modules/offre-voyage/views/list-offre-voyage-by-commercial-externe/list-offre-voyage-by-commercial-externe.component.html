@@ -1,0 +1,193 @@
+<app-sub-header subHeaderTitre="{{'Voyage '+(categorie$|async).nom|translate}}">
+  <div fxFlex menu>
+    <app-sub-header-search [totale]="paginatorInformations.total" [valueSearch]="search.search"
+                           (onsearch)="onSearch($event)"></app-sub-header-search>
+    <form fxFlex="70" [formGroup]="elementFormSerach" (ngSubmit)="onSearchValue()">
+      <div fxFlex="80" fxLayout="row" fxLayoutAlign="space-between">
+        <mat-form-field fxFlex="23" class="input-headline">
+          <input (dateChange)="onSearchValue()" formControlName="dateDepart" matInput [matDatepicker]="picker"
+                 placeholder="{{'dateDepart'|translate}}">
+          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+        </mat-form-field>
+        <mat-form-field fxFlex="23" class="input-headline">
+          <input (dateChange)="onSearchValue()" formControlName="dateDarrive" matInput [matDatepicker]="picker2"
+                 placeholder="{{'dateDarrive'|translate}}">
+          <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+          <mat-datepicker #picker2></mat-datepicker>
+        </mat-form-field>
+        <mat-form-field fxFlex="23" class="input-headline">
+          <mat-label>{{'Statut'|translate}}</mat-label>
+          <mat-select (selectionChange)="onSearchValue()" formControlName="statut">
+            <mat-option>--</mat-option>
+            <mat-option value="active">{{'active'|translate}}</mat-option>
+            <mat-option value="annulé">{{'annulé'|translate}}</mat-option>
+            <mat-option value="complète">{{'complète'|translate}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field fxFlex="23" class="input-headline">
+          <mat-label>{{'Durée'|translate}}</mat-label>
+          <mat-select (selectionChange)="onSearchValue()" formControlName="sous_categorie_id">
+            <mat-option>--</mat-option>
+            <mat-option *ngFor="let c of (categorie$|async).sousCategories"
+                        [value]="c.id">{{c.nom|translate}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+    </form>
+  </div>
+  <!--<button *ngIf="(userPermission|async).isAdmin||(userPermission|async).role.edit" toolbar mat-stroked-button
+          color="primary"
+          (click)="newElement()">{{'Ajouter'| translate}}</button>-->
+</app-sub-header>
+<div class="container">
+
+  <mat-card>
+    <table mat-table [dataSource]="dataSource">
+
+      <!-- Position Column -->
+      <ng-container matColumnDef="code">
+        <th mat-header-cell *matHeaderCellDef> {{'code'|translate}}</th>
+        <td mat-cell *matCellDef="let element"> {{element.id}} </td>
+      </ng-container>
+
+      <!-- Name Column -->
+      <ng-container matColumnDef="nom">
+        <th mat-header-cell *matHeaderCellDef> {{'Voyage'|translate}}</th>
+        <td mat-cell *matCellDef="let element">
+          <div style="position: relative">
+            {{element.voyage.nom}}  {{element.suffixe}}
+          </div>
+        </td>
+      </ng-container> <!-- Name Column -->
+      <ng-container matColumnDef="dateDepart">
+        <th mat-header-cell *matHeaderCellDef> {{'dateDepart'|translate}}</th>
+        <td mat-cell *matCellDef="let element"> {{element.dateDepart}} </td>
+      </ng-container>
+      <ng-container matColumnDef="dateDarrive">
+        <th mat-header-cell *matHeaderCellDef> {{'dateDarrive'|translate}}</th>
+        <td mat-cell *matCellDef="let element"> {{element.dateDarrive}} </td>
+      </ng-container>
+      <ng-container matColumnDef="nbPlace">
+        <th mat-header-cell *matHeaderCellDef> {{'nombre de place'|translate}}</th>
+        <td mat-cell *matCellDef="let element"> {{element.pivot.nbPlace}} </td>
+      </ng-container>
+      <ng-container matColumnDef="enAttente">
+        <th mat-header-cell *matHeaderCellDef> {{'enAttente'|translate}}</th>
+        <td mat-cell *matCellDef="let element"> {{element.enAttente}} </td>
+      </ng-container>
+      <ng-container matColumnDef="valide">
+        <th mat-header-cell *matHeaderCellDef> {{'valide'|translate}}</th>
+        <td mat-cell *matCellDef="let element"> {{element.valide}} </td>
+      </ng-container>
+      <ng-container matColumnDef="dateoptionelle">
+        <th mat-header-cell *matHeaderCellDef> {{'valide'|translate}}</th>
+        <td mat-cell *matCellDef="let element"> {{element.pivot.optionalDate}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="statut">
+        <th mat-header-cell *matHeaderCellDef> {{'statut'|translate}}</th>
+        <td mat-cell *matCellDef="let element">
+          <mat-chip-list class="mat-chip-table" aria-label="Fish selection">
+            <mat-chip color="primary" *ngIf="element.statut=='active'" selected> {{element.statut}}</mat-chip>
+            <mat-chip color="accent" *ngIf="element.statut=='complète'" selected> {{element.statut}}</mat-chip>
+            <mat-chip color="warn" *ngIf="element.statut=='annulé'" selected> {{element.statut}}</mat-chip>
+          </mat-chip-list>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="sous_categorie">
+        <th mat-header-cell *matHeaderCellDef> {{'sous categorie'|translate}}</th>
+        <td mat-cell *matCellDef="let element"> {{element.voyage.sousCategorie.nom}} </td>
+      </ng-container>
+      <ng-container matColumnDef="villesDepart">
+        <th mat-header-cell *matHeaderCellDef> {{'ville de depart'|translate}}</th>
+        <td class="villes" mat-cell *matCellDef="let element">
+          <samp *ngFor="let v of element.voyage.villes">{{v.nom}}</samp>
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="accompagnateur">
+        <th mat-header-cell *matHeaderCellDef> {{'accompagnateur'|translate}}</th>
+        <td mat-cell *matCellDef="let element">
+          <ul>
+            <li *ngFor="let v of element.accompagnateurs">{{v.nom}} {{v.prenom}}</li>
+          </ul>
+        </td>
+      </ng-container>
+      <!-- actions Column -->
+
+      <ng-container matColumnDef="actions">
+        <th class="actions" mat-header-cell *matHeaderCellDef> {{'Actions'|translate}}</th>
+        <td mat-cell *matCellDef="let element">
+          <button mat-icon-button [matMenuTriggerFor]="appMenu">
+            <mat-icon>more_vert</mat-icon>
+          </button>
+          <mat-menu #appMenu="matMenu">
+            <button *ngIf="(userPermission|async).isAdmin||(userPermission|async).offreVoyage.edit"
+                    (click)="update(element.id)"
+                    mat-menu-item
+                    aria-label="modifier">
+              <mat-icon color="primary">edit</mat-icon>
+              {{'modifier'|translate}}
+            </button>
+            <button *ngIf="(userPermission|async).isAdmin||(userPermission|async).offreVoyage.delete"
+                    (click)="delete(element.id)"
+                    mat-menu-item
+                    aria-label="Supprimer">
+              <mat-icon color="primary">delete</mat-icon>
+              {{'supprimer'|translate}}
+            </button>
+            <button *ngIf="(userPermission|async).isAdmin||(userPermission|async).offreVoyageLimited.edit"
+                    (click)="addCommercialExterne(element)"
+                    mat-menu-item
+                    aria-label="add">
+              <mat-icon color="primary">add</mat-icon>
+              {{'Commercial externe'|translate}}
+            </button>
+            <a *ngIf="(!element.groupe)&&((userPermission|async).isAdmin||(userPermission|async).pgroupe.edit)"
+               routerLink="/offreVoyage/{{(this.categorie$|async).id}}/addvoyageur/{{element.id}}"
+               mat-menu-item
+               aria-label="add">
+              <mat-icon color="primary">add</mat-icon>
+              {{'Voyageurs'|translate}}
+            </a>
+            <a
+              *ngIf="(element.enAttente==0&&element.valide==0)&&element.groupe&&((userPermission|async).isAdmin||(userPermission|async).sgroupe.edit)"
+              routerLink="/offreVoyage/{{(this.categorie$|async).id}}/addgroupe/{{element.id}}"
+              mat-menu-item
+              aria-label="add">
+              <mat-icon color="primary">add</mat-icon>
+              {{'Groupe'|translate}}
+            </a>
+            <a *ngIf="(!element.groupe)&&((userPermission|async).isAdmin||(userPermission|async).pgroupe.read)"
+               mat-menu-item
+               routerLink="/offreVoyage/{{(this.categorie$|async).id}}/listVoyageurs/{{element.id}}"
+               aria-label="list">
+              <mat-icon color="primary">list</mat-icon>
+              {{'Voyageurs'|translate}}
+            </a>
+            <a *ngIf="(element.groupe)&&((userPermission|async).isAdmin||(userPermission|async).sgroupe.read)"
+               mat-menu-item
+               routerLink="/offreVoyage/{{(this.categorie$|async).id}}/listVoyageursGroupe/{{element.id}}"
+               aria-label="list">
+              <mat-icon color="primary">list</mat-icon>
+              {{'Groupe'|translate}}
+            </a>
+          </mat-menu>
+
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+
+    <mat-paginator #paginator
+                   [length]="paginatorInformations.total"
+                   [pageSize]="paginatorInformations.per_page"
+                   [pageIndex]="paginatorInformations.current_page-1"
+                   [pageSizeOptions]="[5, 15, 30, 60, 120]"
+                   (page)="change(paginator)"
+                   showFirstLastButtons></mat-paginator>
+  </mat-card>
+</div>

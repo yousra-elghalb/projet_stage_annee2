@@ -1,0 +1,31 @@
+.facture-container {
+  width: 21cm;
+  height: 29.7cm;
+  padding: 40px 40px 100px 40px;
+}
+
+#c {
+  width: 21cm;
+}
+
+table, td {
+  border: 1px solid black;
+  border-collapse: collapse;
+}
+
+table td {
+  text-align: center;
+}
+
+b {
+}
+
+tbody {
+  td {
+    vertical-align: top;
+
+    > div {
+      margin-top: 60px;
+    }
+  }
+}

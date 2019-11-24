@@ -1,0 +1,57 @@
+.mat-toolbar-row, .mat-toolbar-single-row {
+  width: auto !important;
+}
+
+
+//debut subheader********************************************
+
+
+.subheader {
+  height: 90px;
+  transition: all .3s ease;
+  background-color: #fff;
+  box-shadow: 0 10px 30px 0 rgba(82, 63, 105, .08);
+  margin: 0;
+  padding: 0 !important;
+
+  .subheader-container {
+    width: 100%;
+    padding: 0px 25px;
+  }
+
+}
+
+@media (max-width: 870px) {
+  .subheader {
+    height: auto;
+    min-height: 60px;
+
+    .subheader-container {
+      padding: 15px 25px;
+    }
+  }
+}
+
+@media (min-width: 1025px) {
+  .subheader.subheader-fixed {
+    position: fixed;
+    top: 65px;
+    right: 0;
+    left: 0;
+    z-index: 97;
+  }
+}
+
+
+@media (min-width: 1025px) {
+
+}
+
+
+mat-divider {
+  height: 25px;
+  border-right-width: 3px;
+  margin: 0 15px;
+}
+
+//fin subheader********************************************

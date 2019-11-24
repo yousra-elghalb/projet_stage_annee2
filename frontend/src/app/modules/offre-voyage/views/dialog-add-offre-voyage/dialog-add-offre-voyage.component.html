@@ -1,0 +1,159 @@
+<h2 mat-dialog-title>{{'Nouvelles dates de depart'|translate}}</h2>
+<div fxLayout="column" fxLayoutAlign="start" mat-dialog-content>
+  <form *ngIf="!(isLoadingSpinner||(isLoading|async))"
+        [formGroup]="elementForm">
+
+    <div fxLayout="column" fxLayoutAlign="start">
+      <div fxLayout="row">
+        <h3>{{'Voyage :'|translate}}</h3>
+        <h3>{{data.nom}}</h3>
+      </div>
+      <div fxLayout="row" fxLayoutAlign="space-between">
+        <h3>dates de departs</h3>
+        <div class="my-card-action">
+          <button (click)="removeOffreVoyage()" mat-icon-button aria-label="remove">
+            <mat-icon>remove</mat-icon>
+          </button>
+          <button (click)="addOffreVoyage()" mat-icon-button aria-label="add">
+            <mat-icon>add</mat-icon>
+          </button>
+        </div>
+      </div>
+      <div role="list">
+        <div formArrayName="offreVoyages"
+             *ngFor="let offreVoyage of elementForm.get('offreVoyages')['controls']; let i = index">
+          <ng-container [formGroupName]="i">
+            <div fxLayout="column">
+              <div fxLayout="row" fxLayoutAlign="space-between">
+                <mat-checkbox fxFlex="10" class="example-margin"
+                              formControlName="groupe">{{'Voyage pour une société ou une famille'|translate}}</mat-checkbox>
+              </div>
+              <div fxLayout="row" fxLayout.lt-md="column" fxLayoutAlign="space-between">
+                <div fxFlex="49" fxLayoutAlign="space-between" fxFlex.lt-md="100">
+                  <mat-form-field fxFlex="48">
+                    <input formControlName="dateDepart" matInput [matDatepicker]="picker"
+                           placeholder="{{'dateDepart'|translate}}">
+                    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                    <mat-datepicker #picker></mat-datepicker>
+                    <app-error-form [field]="'dateDepart'" [form]="offreVoyage"></app-error-form>
+                  </mat-form-field>
+                  <mat-form-field fxFlex="48">
+                    <input formControlName="dateDarrive" matInput [matDatepicker]="picker2"
+                           placeholder="{{'dateDarrive'|translate}}">
+                    <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+                    <mat-datepicker #picker2></mat-datepicker>
+                    <app-error-form [field]="'dateDarrive'" [form]="offreVoyage"></app-error-form>
+                  </mat-form-field>
+                </div>
+                <div fxFlex="49" fxLayoutAlign="space-between" fxFlex.lt-md="100">
+                  <mat-form-field fxFlex="48">
+                    <mat-label>{{'Statut'|translate}}</mat-label>
+                    <mat-select formControlName="statut" required>
+                      <mat-option value="active">{{'active'|translate}}</mat-option>
+                      <mat-option value="annulé">{{'annulé'|translate}}</mat-option>
+                      <mat-option value="complète">{{'complète'|translate}}</mat-option>
+                    </mat-select>
+                    <app-error-form [field]="'statut'" [form]="offreVoyage"></app-error-form>
+                  </mat-form-field>
+                  <div fxFlex="48" fxLayout="row"
+                       fxLayoutAlign="space-between start">
+                    <mat-form-field fxFlex="80">
+                      <mat-label>{{'Chauffeur'|translate}}</mat-label>
+                      <mat-select formControlName="chauffeur_id">
+                        <mat-option>--</mat-option>
+                        <mat-option *ngFor="let cat of chauffeurs|async" [value]="cat.id">
+                          {{cat.nom}} {{cat.prenom}}
+                        </mat-option>
+                      </mat-select>
+                      <app-error-form [field]="'chauffeur_id'" [form]="offreVoyage"></app-error-form>
+                    </mat-form-field>
+                    <button *ngIf="(userPermission|async).isAdmin||(userPermission|async).chauffeur.edit"
+                            (click)="addChauffeur()" mat-icon-button color="primary">
+                      <mat-icon>add_circle</mat-icon>
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <div fxLayout="row" fxLayout.lt-md="column" fxLayoutAlign="space-between">
+                <div fxFlex="49" fxLayoutAlign="space-between" fxFlex.lt-md="100">
+                  <mat-form-field fxFlex="48">
+                    <input formControlName="suffixe" matInput
+                           placeholder="{{'suffixe'|translate}}">
+                    <app-error-form [field]="'suffixe'" [form]="offreVoyage"></app-error-form>
+                  </mat-form-field>
+                  <div fxFlex="48" fxLayout="row" fxLayoutAlign="space-between start">
+                    <mat-form-field fxFlex="80">
+                      <mat-label>{{'vehicule'|translate}}</mat-label>
+                      <mat-select formControlName="vehicule_id">
+                        <mat-option>--</mat-option>
+                        <mat-option *ngFor="let cat of vehicules|async" [value]="cat.id">
+                          {{cat.type.nom + ' / Place :' + cat.place + ' / ' + cat.marque.nom}}
+                        </mat-option>
+                      </mat-select>
+                      <app-error-form [field]="'vehicule_id'" [form]="offreVoyage"></app-error-form>
+                    </mat-form-field>
+                    <button *ngIf="(userPermission|async).isAdmin||(userPermission|async).agence.edit"
+                            (click)="addVehicule()" mat-icon-button color="primary">
+                      <mat-icon>add_circle</mat-icon>
+                    </button>
+                  </div>
+
+                </div>
+                <div fxFlex="49" fxLayoutAlign="space-between" fxFlex.lt-md="100">
+                  <div fxFlex="48" fxLayout="row" fxLayoutAlign="space-between start">
+                    <mat-form-field fxFlex="80">
+                      <mat-label>{{'Agence'|translate}}</mat-label>
+                      <mat-select formControlName="agence_id">
+                        <mat-option>--</mat-option>
+                        <mat-option *ngFor="let cat of agences|async" [value]="cat.id">
+                          {{cat.nom}}
+                        </mat-option>
+                      </mat-select>
+                      <app-error-form [field]="'agence_id'" [form]="offreVoyage"></app-error-form>
+                    </mat-form-field>
+                    <button *ngIf="(userPermission|async).isAdmin||(userPermission|async).agence.edit"
+                            (click)="addAgence()" mat-icon-button color="primary">
+                      <mat-icon>add_circle</mat-icon>
+                    </button>
+                  </div>
+                  <div fxFlex="48" fxLayout="row" fxLayoutAlign="space-between start">
+                    <mat-form-field fxFlex="80">
+                      <mat-label>{{'accompagnateurs'|translate}}</mat-label>
+                      <mat-select formControlName="accompagnateur_ids" multiple>
+                        <mat-option>--</mat-option>
+                        <mat-option *ngFor="let acc of accompagnateurs|async" [value]="acc.id">
+                          {{acc.nom}} {{acc.prenom}}
+                        </mat-option>
+                      </mat-select>
+                      <app-error-form [field]="'accompagnateur_ids'" [form]="offreVoyage"></app-error-form>
+                    </mat-form-field>
+                    <button *ngIf="(userPermission|async).isAdmin||(userPermission|async).accompagnateur.edit"
+                            (click)="addAccompagnateur()" mat-icon-button color="primary">
+                      <mat-icon>add_circle</mat-icon>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </ng-container>
+          <mat-divider></mat-divider>
+        </div>
+      </div>
+
+    </div>
+
+
+  </form>
+  <div class="spinner-wrapper solid"
+       *ngIf="isLoadingSpinner||(isLoading|async)">
+    <mat-spinner diameter="60"></mat-spinner>
+  </div>
+</div>
+<div fxLayout="row" fxLayoutAlign="end" mat-dialog-actions>
+  <button color="primary" style="margin-right: 10px" mat-raised-button (click)="reset()">{{'reset'|translate}}</button>
+  <button color="primary" mat-raised-button [disabled]="!elementForm.valid"
+          (click)="save()">{{'Save'|translate}}</button>
+</div>
+
+

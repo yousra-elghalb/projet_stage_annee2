@@ -1,0 +1,30 @@
+<div class="body" fxLayoutAlign="center center" fxLayout="row">
+  <div fxFlex="80" fxFlex.gt-xs="50" fxFlex.gt-md="30" fxFlex.gt-sm="40" fxLayout="column">
+
+    <div class="title">
+      <h3>Sign In</h3>
+    </div>
+    <form fxLayout="column" [formGroup]="elementForm" (ngSubmit)="login()">
+
+      <div fxLayout="column" fxLayoutAlign="end">
+        <mat-form-field>
+          <label>
+            <input matInput placeholder="{{'username'|translate}}" formControlName="email">
+          </label>
+          <app-error-form [field]="'email'" [form]="elementForm"></app-error-form>
+        </mat-form-field>
+        <mat-form-field>
+          <label>
+            <input matInput type="password" placeholder="{{'password'|translate}}" formControlName="password">
+          </label>
+          <app-error-form [field]="'password'" [form]="elementForm"></app-error-form>
+        </mat-form-field>
+      </div>
+      <div fxLayout="row" class="actions" fxLayoutAlign="space-between center">
+        <a href="#">{{'mot de passe oublié'|translate}}</a>
+        <button mat-raised-button color="primary">Sign Up</button>
+      </div>
+    </form>
+  </div>
+
+</div>

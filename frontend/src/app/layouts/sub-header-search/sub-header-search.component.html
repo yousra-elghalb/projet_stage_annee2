@@ -1,0 +1,10 @@
+<div fxFlex fxLayout="row" fxLayoutAlign="start center">
+  <div class="mat-h3 mat-subheading-2">
+    {{'totale'|translate}}{{totale}}
+  </div>
+  <div fxFlex="70">
+    <form [formGroup]="elementForm" (ngSubmit)="onSearch()">
+      <input class="search" type="text" formControlName="search" placeholder="{{'search...'|translate}}">
+    </form>
+  </div>
+</div>
